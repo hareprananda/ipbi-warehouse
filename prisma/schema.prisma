@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id            String          @id
+  name          String
+  phone         String          @unique
+  level         UserLevel       @default(APPROVER)
+  password      String
+  createdAt     DateTime        @default(now())
+  GoodsHistory  GoodsHistory[]
+  ActiveContact ActiveContact[]
+}
+
+enum UserLevel {
+  APPROVER
+  ADMIN
+}
+
+model ActiveContact {
+  id     Int    @id @default(autoincrement())
+  userId String
+  user   Users  @relation(fields: [userId], references: [id])
+}
+
+model Goods {
+  id           String         @id
+  name         String
+  unit         String
+  stock        Int            @default(0)
+  GoodsHistory GoodsHistory[]
+}
+
+model Requester {
+  id            String    @id
+  name          String
+  phone         String    @unique
+  numberRequest Int       @default(0)
+  request       Request[]
+}
+
+model Request {
+  id           String         @id
+  idRequester  String
+  requester    Requester      @relation(fields: [idRequester], references: [id])
+  receiveDate  DateTime
+  returnDate   DateTime?
+  type         RequestType
+  status       RequestStatus
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  goodsHistory GoodsHistory[]
+}
+
+enum RequestType {
+  BORROW
+  TAKE
+}
+
+enum RequestStatus {
+  PENDING
+  REJECT
+  APPROVE
+}
+
+model GoodsHistory {
+  id        BigInt   @id @default(autoincrement())
+  idRequest String?
+  request   Request? @relation(fields: [idRequest], references: [id])
+  idGoods   String
+  goods     Goods    @relation(fields: [idGoods], references: [id])
+  quantity  Int
+  assignBy  String
+  assignee  Users    @relation(fields: [assignBy], references: [id])
+}

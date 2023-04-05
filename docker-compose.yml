@@ -1,0 +1,24 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/var/app/ipbi-be
+    networks:
+      - ipbi_network
+  db:
+    image: postgres:13
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+    networks:
+      - ipbi_network
+
+networks:
+  ipbi_network:
