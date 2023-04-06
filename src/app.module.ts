@@ -6,6 +6,9 @@ import { UserModule } from './user/user.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { RequestModule } from './request/request.module';
+import { RequesterModule } from './requester/requester.module';
+import { HistoryModule } from './history/history.module';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   providers: [
@@ -20,6 +23,9 @@ import { RequestModule } from './request/request.module';
     PrismaModule,
     UserModule,
     RequestModule,
+    RequesterModule,
+    HistoryModule,
+    ContactModule,
   ],
 })
 export class AppModule {}

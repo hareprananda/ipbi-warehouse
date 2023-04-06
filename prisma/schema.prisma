@@ -52,10 +52,10 @@ model Request {
   id           String         @id
   idRequester  String
   requester    Requester      @relation(fields: [idRequester], references: [id])
-  receiveDate  DateTime
+  takeDate     DateTime
   returnDate   DateTime?
   type         RequestType
-  status       RequestStatus
+  status       RequestStatus  @default(PENDING)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   goodsHistory GoodsHistory[]
@@ -79,6 +79,6 @@ model GoodsHistory {
   idGoods   String
   goods     Goods    @relation(fields: [idGoods], references: [id])
   quantity  Int
-  assignBy  String
-  assignee  Users    @relation(fields: [assignBy], references: [id])
+  assignBy  String?
+  assignee  Users?   @relation(fields: [assignBy], references: [id])
 }

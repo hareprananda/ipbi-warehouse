@@ -27,4 +27,14 @@ export class AuthService {
     returnedData['accessToken'] = await this.jwt.signAsync(returnedData);
     return returnedData;
   }
+
+  async test() {
+    return await this.prisma.users.findFirst({
+      where: {
+        NOT: {
+          name: 'qqqq',
+        },
+      },
+    });
+  }
 }
