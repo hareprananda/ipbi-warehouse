@@ -18,6 +18,12 @@ export class UserService {
           phone: phoneNumber,
           password: await hash(phoneNumber, 10),
         },
+        select: {
+          uuid: true,
+          name: true,
+          level: true,
+          phone: true,
+        },
       });
       return HttpReturn(newData, 200);
     } catch (err) {
@@ -35,6 +41,7 @@ export class UserService {
       },
     });
     if (!user) return HttpReturn('Wrong specified user', 400);
+
     try {
       await this.prisma.activeContact.upsert({
         create: {
