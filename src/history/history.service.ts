@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { HistoryDto } from './dto';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class HistoryService {
@@ -9,6 +10,7 @@ export class HistoryService {
   async createHistory({ idGoods, quantity, assignBy, idRequest }: HistoryDto) {
     const history = await this.prisma.goodsHistory.create({
       data: {
+        uuid: randomUUID(),
         quantity,
         idGoods,
         assignBy,

@@ -1,4 +1,4 @@
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddPayload } from './dto';
 import { randomUUID } from 'crypto';
@@ -13,7 +13,7 @@ export class UserService {
     try {
       const newData = await this.prisma.users.create({
         data: {
-          id: randomUUID(),
+          uuid: randomUUID(),
           name,
           phone: phoneNumber,
           password: await hash(phoneNumber, 10),
@@ -28,20 +28,20 @@ export class UserService {
     }
   }
 
-  async setContactActive(id: string) {
+  async setContactActive(uuid: string) {
     const user = await this.prisma.users.findUnique({
       where: {
-        id,
+        uuid,
       },
     });
     if (!user) return HttpReturn('Wrong specified user', 400);
     try {
       await this.prisma.activeContact.upsert({
         create: {
-          userId: id,
+          userId: user.id,
         },
         update: {
-          userId: id,
+          userId: user.id,
         },
         where: {
           id: 1,

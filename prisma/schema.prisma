@@ -11,7 +11,8 @@ datasource db {
 }
 
 model Users {
-  id            String          @id
+  id            Int             @id @default(autoincrement())
+  uuid          String          @unique()
   name          String
   phone         String          @unique
   level         UserLevel       @default(APPROVER)
@@ -27,13 +28,14 @@ enum UserLevel {
 }
 
 model ActiveContact {
-  id     Int    @id @default(autoincrement())
-  userId String
-  user   Users  @relation(fields: [userId], references: [id])
+  id     Int   @id @default(autoincrement())
+  userId Int
+  user   Users @relation(fields: [userId], references: [id])
 }
 
 model Goods {
-  id           String         @id
+  id           Int            @id @default(autoincrement())
+  uuid         String         @unique
   name         String
   unit         String
   stock        Int            @default(0)
@@ -41,7 +43,8 @@ model Goods {
 }
 
 model Requester {
-  id            String    @id
+  id            Int       @id @default(autoincrement())
+  uuid          String    @unique()
   name          String
   phone         String    @unique
   numberRequest Int       @default(0)
@@ -50,7 +53,7 @@ model Requester {
 
 model Request {
   id           String         @id
-  idRequester  String
+  idRequester  Int
   requester    Requester      @relation(fields: [idRequester], references: [id])
   takeDate     DateTime
   returnDate   DateTime?
@@ -74,11 +77,12 @@ enum RequestStatus {
 
 model GoodsHistory {
   id        BigInt   @id @default(autoincrement())
+  uuid      String   @unique()
   idRequest String?
   request   Request? @relation(fields: [idRequest], references: [id])
-  idGoods   String
+  idGoods   Int
   goods     Goods    @relation(fields: [idGoods], references: [id])
   quantity  Int
-  assignBy  String?
+  assignBy  Int?
   assignee  Users?   @relation(fields: [assignBy], references: [id])
 }

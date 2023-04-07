@@ -11,7 +11,7 @@ export class RequesterService {
     const requester = await this.prisma.requester.upsert({
       create: {
         name,
-        id: randomUUID(),
+        uuid: randomUUID(),
         phone: phoneNumber,
       },
       update: {
