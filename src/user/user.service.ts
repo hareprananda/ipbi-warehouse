@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { AddPayload } from './dto';
 import { randomUUID } from 'crypto';
 import { hash } from 'bcrypt';
+import { HttpReturn } from 'src/helper';
 
 @Injectable()
 export class UserService {
@@ -18,12 +19,12 @@ export class UserService {
           password: await hash(phoneNumber, 10),
         },
       });
-      return newData;
+      return HttpReturn(newData, 200);
     } catch (err) {
       if (err?.constructor?.name === 'PrismaClientKnownRequestError') {
-        return new HttpException({ phoneNumber: 'PhoneNumber Taken' }, 400);
+        return HttpReturn('Phonenumber Taken', 400);
       }
-      return new HttpException('Something went wrong', 500);
+      return HttpReturn('Something went wrong', 400);
     }
   }
 
@@ -33,7 +34,7 @@ export class UserService {
         id,
       },
     });
-    if (!user) return new HttpException('Wrong specified user', 500);
+    if (!user) return HttpReturn('Wrong specified user', 400);
     try {
       await this.prisma.activeContact.upsert({
         create: {
@@ -46,14 +47,9 @@ export class UserService {
           id: 1,
         },
       });
-      return {
-        response: 'OK',
-        status: 200,
-        message: 'OK',
-        name: 'Success',
-      };
+      return HttpReturn('Success', 200);
     } catch {
-      return new HttpException('Something went wrong', 500);
+      return HttpReturn('Something went wrong', 500);
     }
   }
 }

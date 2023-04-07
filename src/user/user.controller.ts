@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Patch, Param } from '@nestjs/common';
+import { Body, Controller, Post, Patch, Param, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AddPayload } from './dto';
 import { Admin } from 'src/auth/auth.guard';
+import { Response } from 'express';
 
 @Controller('user')
 @Admin()
@@ -9,13 +10,15 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post()
-  add(@Body() payload: AddPayload) {
+  async add(@Body() payload: AddPayload, @Res() response: Response) {
     payload.phoneNumber = payload.phoneNumber.toString();
-    return this.userService.add(payload);
+    const res = await this.userService.add(payload);
+    response.status(res.statusCode).json(res);
   }
 
   @Patch('/:id/active')
-  setContactActive(@Param('id') id: string) {
-    return this.userService.setContactActive(id);
+  async setContactActive(@Param('id') id: string, @Res() response: Response) {
+    const res = await this.userService.setContactActive(id);
+    response.status(res.statusCode).json(res);
   }
 }

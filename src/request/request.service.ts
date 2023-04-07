@@ -5,6 +5,7 @@ import { RequestDto } from './dto';
 import { HistoryService } from 'src/history/history.service';
 import { RequesterService } from 'src/requester/requester.service';
 import { RequesterDto } from 'src/requester/dto';
+import { HttpReturn } from 'src/helper';
 
 @Injectable()
 export class RequestService {
@@ -12,10 +13,10 @@ export class RequestService {
 
   async addRequest({ pickUpDate, requestType, goods, returnDate, name, phoneNumber }: RequestDto & RequesterDto) {
     const pickupTime = new Date(pickUpDate).getTime();
-    if (pickupTime < new Date().getTime()) return new HttpException('Take date should be at least today', 400);
+    if (pickupTime < new Date().getTime()) return HttpReturn('Take date should be at least today', 400);
 
     if (requestType === 'BORROW' && (!returnDate || new Date(returnDate).getTime() < pickupTime)) {
-      return new HttpException('Please specify the return date correctly', HttpStatus.BAD_REQUEST);
+      return HttpReturn('Please specify the return date correctly', HttpStatus.BAD_REQUEST);
     }
     if (requestType === 'TAKE') returnDate = undefined;
 
@@ -24,7 +25,7 @@ export class RequestService {
         OR: goods.map((v) => ({ id: v.id })),
       },
     });
-    if (goodsExists.length < goods.length) return new HttpException('Wrong goods specified', HttpStatus.BAD_REQUEST);
+    if (goodsExists.length < goods.length) return HttpReturn('Wrong goods specified', HttpStatus.BAD_REQUEST);
 
     const requester = await this.requester.addOrUpdate({
       name,
@@ -48,6 +49,6 @@ export class RequestService {
         idRequest: request.id,
       });
     }
-    return { message: 'OK' };
+    return HttpReturn('Ok', 200);
   }
 }
