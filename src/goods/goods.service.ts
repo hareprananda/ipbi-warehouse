@@ -31,7 +31,7 @@ export class GoodsService {
       });
       return HttpReturn(goods, HttpStatus.OK);
     } catch {
-      return HttpReturn('Seomthing wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -40,7 +40,7 @@ export class GoodsService {
     if (!assignBy.data) return assignBy;
 
     try {
-      await this.prisma.$transaction(async (tx) => {
+      const newGoods = await this.prisma.$transaction(async (tx) => {
         const goods = await this.createGoods(data, tx);
         if (!goods.data) throw 'err';
         const history = await this.history.createHistory(
@@ -52,8 +52,9 @@ export class GoodsService {
           tx,
         );
         if (!history.data) throw new Error('error');
+        return goods.data;
       });
-      return HttpReturn('Success', 200);
+      return HttpReturn(newGoods, 200);
     } catch {
       return HttpReturn('Something Wrong', 500);
     }
@@ -69,6 +70,61 @@ export class GoodsService {
         select: this.displayedCol,
       });
       return HttpReturn(goods, HttpStatus.OK);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async getGoods(name: string, { limit, page }: { limit: number; page: number }) {
+    const nameFilter = '%' + name.toLowerCase() + '%';
+
+    const dataTotal: [{ totalRow: bigint }] = await this.prisma.$queryRaw`
+      select count(*) as "totalRow" from "Goods" where LOWER( "name"  ) like ${nameFilter}
+    `;
+    const metadata = {
+      totalPage: Math.ceil(parseInt(dataTotal[0]['totalRow'] as unknown as string) / limit),
+      currentPage: page,
+    };
+
+    const data = await this.prisma.$queryRaw`
+    select uuid, unit, name, stock from "Goods" where
+    LOWER("name") like ${nameFilter} 
+    order by "updatedAt" desc
+    limit ${limit} offset ${(page - 1) * limit}
+    `;
+    return HttpReturn({ data, metadata }, HttpStatus.OK);
+  }
+
+  async updateGoods(assignByUuid: string, uuid: string, data: GoodsPayload) {
+    const assignBy = await this.user.findByUUID(assignByUuid);
+    if (!assignBy.data) return assignBy;
+    try {
+      const currentData = await this.prisma.goods.findUnique({ where: { uuid } });
+      const updatingGoods = await this.prisma.$transaction(async (tx) => {
+        const newData = await tx.goods.update({
+          where: {
+            uuid,
+          },
+          data: {
+            name: data.name,
+            stock: data.stock,
+            unit: data.unitName,
+          },
+        });
+        if (!newData.id) throw 'err';
+        const diff = newData.stock - currentData.stock;
+        const historyData = await this.history.createHistory(
+          {
+            idGoods: newData.id,
+            quantity: diff,
+            assignBy: assignBy.data.id,
+          },
+          tx,
+        );
+        if (!historyData.data) throw 'err';
+        return newData;
+      });
+      return HttpReturn(updatingGoods, HttpStatus.INTERNAL_SERVER_ERROR);
     } catch {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }

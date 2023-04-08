@@ -84,7 +84,7 @@ model GoodsHistory {
   idRequest BigInt?
   request   Request? @relation(fields: [idRequest], references: [id])
   idGoods   Int
-  goods     Goods    @relation(fields: [idGoods], references: [id])
+  goods     Goods    @relation(fields: [idGoods], references: [id], onDelete: Cascade)
   quantity  Int
   assignBy  Int?
   assignee  Users?   @relation(fields: [assignBy], references: [id])
