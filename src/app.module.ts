@@ -9,6 +9,7 @@ import { RequestModule } from './request/request.module';
 import { RequesterModule } from './requester/requester.module';
 import { HistoryModule } from './history/history.module';
 import { ContactModule } from './contact/contact.module';
+import { GoodsModule } from './goods/goods.module';
 
 @Module({
   providers: [
@@ -26,6 +27,7 @@ import { ContactModule } from './contact/contact.module';
     RequesterModule,
     HistoryModule,
     ContactModule,
+    GoodsModule,
   ],
 })
 export class AppModule {}

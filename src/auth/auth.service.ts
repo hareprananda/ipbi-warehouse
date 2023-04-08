@@ -3,6 +3,7 @@ import { SignInDTO } from './dto/auth.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { HttpReturn } from 'src/helper';
 
 @Injectable()
 export class AuthService {
@@ -14,13 +15,11 @@ export class AuthService {
       },
     });
     if (!user || !(await compare(password, user.password)))
-      return new HttpException(
-        'Wrong phone number or password',
-        HttpStatus.BAD_REQUEST,
-      );
+      return HttpReturn('Wrong phone number or password', HttpStatus.BAD_REQUEST);
 
     const returnedData = {
       name: user.name,
+      uuid: user.uuid,
       phoneNumber: user.phone,
       level: user.level,
     };

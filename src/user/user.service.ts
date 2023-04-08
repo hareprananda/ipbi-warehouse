@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddPayload } from './dto';
 import { randomUUID } from 'crypto';
 import { hash } from 'bcrypt';
 import { HttpReturn } from 'src/helper';
+import { PrismaTrxService } from 'src/prisma/dto';
 
 @Injectable()
 export class UserService {
@@ -35,20 +36,15 @@ export class UserService {
   }
 
   async setContactActive(uuid: string) {
-    const user = await this.prisma.users.findUnique({
-      where: {
-        uuid,
-      },
-    });
-    if (!user) return HttpReturn('Wrong specified user', 400);
-
+    const user = await this.findByUUID(uuid);
+    if (!user.data) return user;
     try {
       await this.prisma.activeContact.upsert({
         create: {
-          userId: user.id,
+          userId: user.data.id,
         },
         update: {
-          userId: user.id,
+          userId: user.data.id,
         },
         where: {
           id: 1,
@@ -58,5 +54,16 @@ export class UserService {
     } catch {
       return HttpReturn('Something went wrong', 500);
     }
+  }
+
+  async findByUUID(uuid: string, tx?: PrismaTrxService) {
+    const ctx = tx ? tx : this.prisma;
+    const user = await ctx.users.findUnique({
+      where: {
+        uuid,
+      },
+    });
+    if (!user) return HttpReturn('Wrong specified user', HttpStatus.BAD_REQUEST);
+    return HttpReturn(user, HttpStatus.OK);
   }
 }

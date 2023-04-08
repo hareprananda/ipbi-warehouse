@@ -11,6 +11,7 @@ export class SignInDTO {
 
 export type JWTPayload = {
   name: string;
+  uuid: string;
   phoneNumber: string;
   level: UserLevel;
 };
