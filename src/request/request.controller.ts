@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
-import { MonthlyDto, RequestDto } from './dto';
+import { ChangeStatusDto, DetailParam, MonthlyDto, RequestDto, RequestQuery } from './dto';
 import { RequestService } from './request.service';
 import { Public } from 'src/auth/auth.guard';
 import { Response } from 'express';
+import { Param, Patch, Req } from '@nestjs/common/decorators';
+import { Request } from 'src/helper';
 
 @Controller('request')
 export class RequestController {
@@ -32,6 +34,31 @@ export class RequestController {
   @Get('pending')
   async getPending(@Res() response: Response) {
     const data = await this.request.getPending(15);
+    response.status(data.statusCode).json(data);
+  }
+
+  @Get()
+  async getRequest(@Query() query: RequestQuery, @Res() response: Response) {
+    const { limit, page, ...filter } = query;
+    const data = await this.request.getRequest(filter, { limit: parseInt(limit || '20'), page: parseInt(page || '1') });
+    response.status(data.statusCode).json(data);
+  }
+
+  @Get('/:id')
+  async getDetail(@Param() param: DetailParam, @Res() response: Response) {
+    const data = await this.request.requestDetail(param.id);
+    response.status(data.statusCode).json(data);
+  }
+
+  @Patch('/:id')
+  async changeStatus(
+    @Param() param: DetailParam,
+    @Body() body: ChangeStatusDto,
+    @Res() response: Response,
+    @Req() req: Request,
+  ) {
+    const userUUID = req.user.uuid;
+    const data = await this.request.changeStatus(param.id, body.status, userUUID);
     response.status(data.statusCode).json(data);
   }
 }

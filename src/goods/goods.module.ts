@@ -8,5 +8,6 @@ import { HistoryModule } from 'src/history/history.module';
   controllers: [GoodsController],
   providers: [GoodsService],
   imports: [UserModule, HistoryModule],
+  exports: [GoodsService],
 })
 export class GoodsModule {}

@@ -129,4 +129,26 @@ export class GoodsService {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async changeGoodsStock(id: number, changeStock: number, tx?: PrismaTrxService) {
+    const ctx = tx ? tx : this.prisma;
+    const stock = {
+      decrement: Math.abs(changeStock),
+      increment: changeStock,
+    };
+    delete stock[changeStock < 0 ? 'increment' : 'decrement'];
+    try {
+      await ctx.goods.update({
+        where: {
+          id,
+        },
+        data: {
+          stock,
+        },
+      });
+      return HttpReturn('Ok', HttpStatus.OK);
+    } catch (err) {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

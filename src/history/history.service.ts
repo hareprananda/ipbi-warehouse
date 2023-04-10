@@ -4,6 +4,7 @@ import { GoodsHistory, HistoryDto } from './dto';
 import { randomUUID } from 'crypto';
 import { PrismaTrxService } from 'src/prisma/dto';
 import { HttpReturn } from 'src/helper';
+import { GoodsHistory as HistoryModel } from '@prisma/client';
 
 @Injectable()
 export class HistoryService {
@@ -68,6 +69,26 @@ export class HistoryService {
       limit ${limit} offset ${(page - 1) * limit}
     `;
       return HttpReturn({ data, metadata }, HttpStatus.OK);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async updateHistory(id: number, data: Partial<HistoryModel>, tx?: PrismaTrxService) {
+    const ctx = tx || this.prisma;
+    try {
+      const updated = await ctx.goodsHistory.update({
+        where: {
+          id,
+        },
+        data,
+        select: {
+          id: true,
+          assignee: true,
+          uuid: true,
+        },
+      });
+      return HttpReturn(updated, HttpStatus.OK);
     } catch {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }

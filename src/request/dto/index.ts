@@ -1,6 +1,16 @@
-import { Goods, Request, RequestType } from '@prisma/client';
+import { Goods, Request, RequestStatus, RequestType } from '@prisma/client';
 import { Type } from 'class-transformer';
-import { IsEnum, IsNumber, IsArray, IsString, IsDateString, ValidateNested, IsOptional } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsArray,
+  IsString,
+  IsDateString,
+  ValidateNested,
+  IsOptional,
+  IsNumberString,
+  IsUUID,
+} from 'class-validator';
 import { RequesterDto } from 'src/requester/dto';
 
 class GoodType {
@@ -50,3 +60,56 @@ export type EventMonth = {
     unit: string;
   }[];
 };
+
+export class RequestQuery {
+  @IsDateString()
+  @IsOptional()
+  takeDate?: string;
+
+  @IsDateString()
+  @IsOptional()
+  returnDate?: string;
+
+  @IsUUID()
+  @IsOptional()
+  assignBy?: string;
+
+  @IsString()
+  @IsOptional()
+  requestBy?: string;
+
+  @IsEnum(RequestStatus)
+  @IsOptional()
+  status?: Request['status'];
+
+  @IsNumberString()
+  @IsOptional()
+  page?: string;
+
+  @IsNumberString()
+  @IsOptional()
+  limit?: string;
+}
+
+export class DetailParam {
+  @IsUUID()
+  id: string;
+}
+
+export interface RequestDetail {
+  uuid: string;
+  takeDate: string;
+  returnDate: string;
+  type: Request['type'];
+  assignee: string;
+  status: Request['status'];
+  goods: {
+    name: string;
+    quantity: number;
+  }[];
+}
+
+export class ChangeStatusDto {
+  @IsEnum(RequestStatus)
+  status: RequestStatus;
+}
