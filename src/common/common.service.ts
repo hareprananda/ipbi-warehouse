@@ -13,7 +13,7 @@ export class CommonService {
     const dataTotal = await prismaPromise;
     return {
       totalPage: Math.ceil(parseInt(dataTotal[0]['totalRow'] as unknown as string) / limit),
-      currentPage: page,
+      currentPage: parseInt(page as unknown as string),
     };
   }
 }

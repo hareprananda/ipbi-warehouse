@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { randomUUID } from 'crypto';
 import { EventMonth, RequestDetail, RequestDto, RequestPerMonth, RequestQuery } from './dto';
@@ -54,45 +54,52 @@ export class RequestService {
       return acc;
     }, {} as Record<string, (typeof goods)[number]>);
 
-    const requester = await this.requester.addOrUpdate({
-      name,
-      phoneNumber,
-    });
-
-    const request = await this.prisma.$transaction(async (tx) => {
-      const newreq = await tx.request.create({
-        data: {
-          uuid: randomUUID(),
-          takeDate: new Date(pickUpDate),
-          returnDate: returnDate ? new Date(returnDate) : undefined,
-          type: requestType,
-          idRequester: requester.id,
-        },
-        select: {
-          uuid: true,
-          id: true,
-          status: true,
-          returnDate: true,
-          takeDate: true,
-          type: true,
-        },
-      });
-
-      for (const good of goodsExists) {
-        const history = await this.history.createHistory(
+    try {
+      const request = await this.prisma.$transaction(async (tx) => {
+        const requester = await this.requester.addOrUpdate(
           {
-            idGoods: good.id,
-            quantity: -goodsObj[good.uuid].amount,
-            idRequest: newreq.id,
+            name,
+            phoneNumber,
           },
           tx,
         );
-        if (!history.data) throw 'err';
-      }
-      return newreq;
-    });
-    delete request.id;
-    return HttpReturn(request, 200);
+        if (!requester.data) throw 'err';
+        const newreq = await tx.request.create({
+          data: {
+            uuid: randomUUID(),
+            takeDate: new Date(pickUpDate),
+            returnDate: returnDate ? new Date(returnDate) : undefined,
+            type: requestType,
+            idRequester: requester.data.id,
+          },
+          select: {
+            uuid: true,
+            id: true,
+            status: true,
+            returnDate: true,
+            takeDate: true,
+            type: true,
+          },
+        });
+
+        for (const good of goodsExists) {
+          const history = await this.history.createHistory(
+            {
+              idGoods: good.id,
+              quantity: -goodsObj[good.uuid].amount,
+              idRequest: newreq.id,
+            },
+            tx,
+          );
+          if (!history.data) throw 'err';
+        }
+        return newreq;
+      });
+      delete request.id;
+      return HttpReturn(request, HttpStatus.OK);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async requestByUUID(uuid: string) {
@@ -134,8 +141,7 @@ export class RequestService {
       }
 
       return HttpReturn(eventByDateObj, HttpStatus.OK);
-    } catch (err) {
-      console.log(err);
+    } catch {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -219,8 +225,8 @@ export class RequestService {
       limit ${limit} offset ${(page - 1) * limit}
     `);
       return HttpReturn({ data, metaData }, HttpStatus.OK);
-    } catch (err) {
-      console.log(err);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

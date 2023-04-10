@@ -113,3 +113,12 @@ export class ChangeStatusDto {
   @IsEnum(RequestStatus)
   status: RequestStatus;
 }
+
+export type RequesterItem = {
+  uuid: string;
+  name: string;
+  numberOfRequest: number;
+  phone: string;
+  lastCreated: string;
+  lastReqUuid: string;
+};

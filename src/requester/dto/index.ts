@@ -1,4 +1,4 @@
-import { IsNumberString, IsNotEmpty } from 'class-validator';
+import { IsNumberString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class RequesterDto {
   @IsNumberString()
@@ -6,4 +6,22 @@ export class RequesterDto {
 
   @IsNotEmpty()
   name: string;
+}
+
+export class GetRequesterDto {
+  @IsNumberString()
+  @IsOptional()
+  limit?: number;
+
+  @IsNumberString()
+  @IsOptional()
+  page?: number;
+
+  @IsNumberString()
+  @IsOptional()
+  phoneNumber?: string;
+
+  @IsString()
+  @IsOptional()
+  name?: string;
 }
