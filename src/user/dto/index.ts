@@ -23,3 +23,11 @@ export class UserQuery {
   @IsOptional()
   page?: string;
 }
+
+export interface ChangeUserData {
+  level?: UserLevel;
+  password?: string;
+  currentPassword?: string;
+  name?: string;
+  phone?: string;
+}

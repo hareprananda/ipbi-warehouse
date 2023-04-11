@@ -1,15 +1,20 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddPayload, UserItem } from './dto';
+import { AddPayload, ChangeUserData, UserItem } from './dto';
 import { randomUUID } from 'crypto';
-import { hash } from 'bcrypt';
+import { hash, compareSync } from 'bcrypt';
 import { HttpReturn } from 'src/helper';
 import { PrismaTrxService } from 'src/prisma/dto';
 import { CommonService } from 'src/common/common.service';
+import { UserLevel } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService, private common: CommonService) {}
+
+  private async hashPassword(char: string) {
+    return await hash(char, 10);
+  }
 
   async add({ name, phoneNumber }: AddPayload) {
     try {
@@ -18,7 +23,7 @@ export class UserService {
           uuid: randomUUID(),
           name,
           phone: phoneNumber,
-          password: await hash(phoneNumber, 10),
+          password: await this.hashPassword(phoneNumber),
         },
         select: {
           uuid: true,
@@ -83,6 +88,37 @@ export class UserService {
       }
       `;
       return HttpReturn({ data, metaData }, HttpStatus.OK);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async changeUser(uuid: string, data: ChangeUserData) {
+    try {
+      const { currentPassword, password, ...newData } = data;
+      if (currentPassword) {
+        const currentData = await this.findByUUID(uuid);
+        if (!currentData.data) throw 'err';
+        if (!compareSync(currentPassword, currentData.data.password))
+          return HttpReturn('Current Password not Match', HttpStatus.BAD_REQUEST);
+      }
+
+      const changedTo = await this.prisma.users.update({
+        where: {
+          uuid,
+        },
+        data: {
+          ...newData,
+          password: password ? await this.hashPassword(password) : undefined,
+        },
+        select: {
+          uuid: true,
+          level: true,
+          name: true,
+          phone: true,
+        },
+      });
+      return HttpReturn(changedTo, HttpStatus.OK);
     } catch {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }

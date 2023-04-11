@@ -11,6 +11,7 @@ import { HistoryModule } from './history/history.module';
 import { ContactModule } from './contact/contact.module';
 import { GoodsModule } from './goods/goods.module';
 import { CommonModule } from './common/common.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   providers: [
@@ -30,6 +31,7 @@ import { CommonModule } from './common/common.module';
     ContactModule,
     GoodsModule,
     CommonModule,
+    ProfileModule,
   ],
 })
 export class AppModule {}
