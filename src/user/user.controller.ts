@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Patch, Param, Res } from '@nestjs/common';
+import { Body, Controller, Post, Patch, Param, Res, Get } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AddPayload } from './dto';
+import { AddPayload, UserQuery } from './dto';
 import { Admin } from 'src/auth/auth.guard';
 import { Response } from 'express';
+import { Query } from '@nestjs/common/decorators';
 
 @Controller('user')
 @Admin()
@@ -20,5 +21,12 @@ export class UserController {
   async setContactActive(@Param('id') id: string, @Res() response: Response) {
     const res = await this.userService.setContactActive(id);
     response.status(res.statusCode).json(res);
+  }
+
+  @Get()
+  async getUsers(@Query() q: UserQuery, @Res() response: Response) {
+    const { limit, page } = q;
+    const data = await this.userService.getUser({ limit: parseInt(limit || '20'), page: parseInt(page || '1') });
+    response.status(data.statusCode).json(data);
   }
 }

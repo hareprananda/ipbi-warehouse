@@ -1,14 +1,15 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddPayload } from './dto';
+import { AddPayload, UserItem } from './dto';
 import { randomUUID } from 'crypto';
 import { hash } from 'bcrypt';
 import { HttpReturn } from 'src/helper';
 import { PrismaTrxService } from 'src/prisma/dto';
+import { CommonService } from 'src/common/common.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private common: CommonService) {}
 
   async add({ name, phoneNumber }: AddPayload) {
     try {
@@ -65,5 +66,25 @@ export class UserService {
     });
     if (!user) return HttpReturn('Wrong specified user', HttpStatus.BAD_REQUEST);
     return HttpReturn(user, HttpStatus.OK);
+  }
+
+  async getUser({ limit, page }: { limit: number; page: number }) {
+    try {
+      const metaData = await this.common.generatePageMetadata(
+        this.prisma.$queryRaw`
+         select count(*) as "totalRow"  from "Users"
+      `,
+        { limit, page },
+      );
+
+      const data: UserItem[] = await this.prisma.$queryRaw`
+        select u.uuid, u."name" , u."createdAt" , u."level", u.phone  from "Users" u limit ${limit}  offset ${
+        (page - 1) * limit
+      }
+      `;
+      return HttpReturn({ data, metaData }, HttpStatus.OK);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
