@@ -21,8 +21,8 @@ import { ProfileModule } from './profile/profile.module';
     },
   ],
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    AuthModule,
+    ConfigModule.forRoot({ isGlobal: true, cache: false }),
+    AuthModule.forRoot(),
     PrismaModule,
     UserModule,
     RequestModule,
