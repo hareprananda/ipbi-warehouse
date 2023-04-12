@@ -1,12 +1,19 @@
 services:
-  app:
+  app_be:
     build:
+
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./backend/Dockerfile
     ports:
       - 8000:8000
-    volumes:
-      - .:/var/app/ipbi-be
+    networks:
+      - ipbi_network
+  app_fe: 
+    build: 
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    ports:
+      - 4000:4000
     networks:
       - ipbi_network
   db:
@@ -22,3 +29,4 @@ services:
 
 networks:
   ipbi_network:
+    driver: bridge
