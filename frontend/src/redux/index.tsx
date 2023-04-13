@@ -2,10 +2,12 @@ import React, { PropsWithChildren } from "react";
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import RegisterReducer from "./registerreducer";
+import {} from "redux";
 import { TypeReducer } from "./reducer";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
+import thunkMiddleware from "redux-thunk";
 
 type ReducerKey = (keyof typeof RegisterReducer)[];
 
@@ -20,6 +22,7 @@ const persistedReducer = persistReducer({ key: "root", version: 1, storage }, re
 
 const store = configureStore({
   reducer: persistedReducer,
+  middleware: [thunkMiddleware],
 });
 
 const persistor = persistStore(store);

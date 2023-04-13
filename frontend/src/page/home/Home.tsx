@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
+import { AnyAction, Dispatch } from "@reduxjs/toolkit";
+import action from "../../redux/reduceraction";
 
 const Home: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { name } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    // @ts-ignore
+    dispatch((dispatch: Dispatch<AnyAction>) => {
+      // dispatch(action.auth.changeAuthForm({ accessToken: "AA", name: "Junaedi", phoneNumber: "0912312323" }));
+      console.log(dispatch);
+    });
+  }, []);
+
   return (
     <div>
       <div className="page-breadcrumb">
         <div className="row">
           <div className="col-md-5 align-self-center">
-            <h3 className="page-title">Dashboard</h3>
+            <h3 className="page-title">{name}</h3>
             <div className="d-flex align-items-center">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
@@ -31,10 +45,7 @@ const Home: React.FC = () => {
                 >
                   January 2021
                 </button>
-                <ul
-                  className="dropdown-menu"
-                  aria-labelledby="dropdownMenuButton"
-                >
+                <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <li>
                     <a className="dropdown-item" href="#">
                       February 2021
@@ -297,9 +308,7 @@ const Home: React.FC = () => {
                   <div className="ps-3">
                     <h3>Daniel Kristeen</h3>
                     <h6 className="text-muted fw-light">UIUX Designer</h6>
-                    <button className="btn btn-light-info text-info">
-                      Follow
-                    </button>
+                    <button className="btn btn-light-info text-info">Follow</button>
                   </div>
                 </div>
                 <div className="row mt-4 pt-2">
@@ -326,59 +335,33 @@ const Home: React.FC = () => {
                     height: "85px",
                   }}
                 >
-                  Lorem ipsum dolor sit ametetur adipisicing elit, sed do
-                  eiusmod tempor incididunt adipisicing elit, sed do eiusmod
-                  tempor incididunLorem ipsum dolor sit ametetur adipisicing
-                  elit, sed do eiusmod tempor incididuntt
+                  Lorem ipsum dolor sit ametetur adipisicing elit, sed do eiusmod tempor incididunt adipisicing elit,
+                  sed do eiusmod tempor incididunLorem ipsum dolor sit ametetur adipisicing elit, sed do eiusmod tempor
+                  incididuntt
                 </p>
                 <ul className="list-icons d-flex flex-item text-center list-style-none">
                   <li className="col my-1">
-                    <a
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="social"
-                      data-original-title="Website"
-                    >
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="social" data-original-title="Website">
                       <i data-feather="globe" className="ps-2"></i>
                     </a>
                   </li>
                   <li className="col my-1">
-                    <a
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="social"
-                      data-original-title="twitter"
-                    >
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="social" data-original-title="twitter">
                       <i data-feather="twitter" className="ps-2"></i>
                     </a>
                   </li>
                   <li className="col my-1">
-                    <a
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="social"
-                      data-original-title="Facebook"
-                    >
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="social" data-original-title="Facebook">
                       <i data-feather="facebook" className="ps-2"></i>
                     </a>
                   </li>
                   <li className="col my-1">
-                    <a
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="social"
-                      data-original-title="Youtube"
-                    >
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="social" data-original-title="Youtube">
                       <i data-feather="youtube" className="ps-2"></i>
                     </a>
                   </li>
                   <li className="col my-1">
-                    <a
-                      data-bs-toggle="tooltip"
-                      data-bs-placement="top"
-                      title="social"
-                      data-original-title="Linkd-in"
-                    >
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="social" data-original-title="Linkd-in">
                       <i data-feather="linkedin" className="ps-2"></i>
                     </a>
                   </li>
@@ -393,10 +376,7 @@ const Home: React.FC = () => {
             <div className="card">
               <div className="card-body">
                 <h4 className="card-title">Recent Chats</h4>
-                <div
-                  className="chat-box scrollable"
-                  style={{ height: "375px" }}
-                >
+                <div className="chat-box scrollable" style={{ height: "375px" }}>
                   <ul className="chat-list m-0 p-0">
                     <li className="mt-4">
                       <div className="chat-img d-inline-block align-top">
@@ -407,17 +387,12 @@ const Home: React.FC = () => {
                         />
                       </div>
                       <div className="chat-content ps-3 d-inline-block">
-                        <h6 className="text-muted text-nowrap">
-                          James Anderson
-                        </h6>
+                        <h6 className="text-muted text-nowrap">James Anderson</h6>
                         <div className="box mb-2 d-inline-block text-dark message fw-normal fs-3 bg-light-info">
-                          Lorem Ipsum is simply dummy text of the printing &
-                          type setting industry.
+                          Lorem Ipsum is simply dummy text of the printing & type setting industry.
                         </div>
                       </div>
-                      <div className="chat-time d-inline-block text-end text-muted">
-                        10:56 am
-                      </div>
+                      <div className="chat-time d-inline-block text-end text-muted">10:56 am</div>
                     </li>
 
                     <li className="mt-4">
@@ -434,9 +409,7 @@ const Home: React.FC = () => {
                           It’s Great opportunity to work.
                         </div>
                       </div>
-                      <div className="chat-time d-inline-block text-end text-muted">
-                        10:57 am
-                      </div>
+                      <div className="chat-time d-inline-block text-end text-muted">10:57 am</div>
                     </li>
 
                     <li className="odd mt-4">
@@ -446,9 +419,7 @@ const Home: React.FC = () => {
                         </div>
                         <br />
                       </div>
-                      <div className="chat-time d-inline-block text-end text-muted">
-                        10:58 am
-                      </div>
+                      <div className="chat-time d-inline-block text-end text-muted">10:58 am</div>
                     </li>
 
                     <li className="odd mt-4">
@@ -458,9 +429,7 @@ const Home: React.FC = () => {
                         </div>
                         <br />
                       </div>
-                      <div className="chat-time d-inline-block text-end text-muted">
-                        10:59 am
-                      </div>
+                      <div className="chat-time d-inline-block text-end text-muted">10:59 am</div>
                     </li>
 
                     <li className="mt-4">
@@ -472,16 +441,12 @@ const Home: React.FC = () => {
                         />
                       </div>
                       <div className="chat-content ps-3 d-inline-block">
-                        <h6 className="text-muted text-nowrap">
-                          Angelina Rhodes
-                        </h6>
+                        <h6 className="text-muted text-nowrap">Angelina Rhodes</h6>
                         <div className="box mb-2 d-inline-block text-dark message fw-normal fs-3 bg-light-primary">
                           Well we have good budget for the project
                         </div>
                       </div>
-                      <div className="chat-time d-inline-block text-end text-muted">
-                        11:00 am
-                      </div>
+                      <div className="chat-time d-inline-block text-end text-muted">11:00 am</div>
                     </li>
                   </ul>
                 </div>
@@ -489,16 +454,10 @@ const Home: React.FC = () => {
               <div className="card-body border-top">
                 <div className="row">
                   <div className="col-8">
-                    <textarea
-                      placeholder="Type your message here"
-                      className="form-control border-0"
-                    ></textarea>
+                    <textarea placeholder="Type your message here" className="form-control border-0"></textarea>
                   </div>
                   <div className="col-4 text-end">
-                    <button
-                      type="button"
-                      className="btn btn-info btn-circle btn-lg"
-                    >
+                    <button type="button" className="btn btn-info btn-circle btn-lg">
                       <i className="fas fa-paper-plane"></i>
                     </button>
                   </div>
@@ -510,15 +469,9 @@ const Home: React.FC = () => {
             <div className="card">
               <div className="card-body">
                 <h4 className="card-title">Recent Messages</h4>
-                <div
-                  className="message-box scrollable"
-                  style={{ height: "476px" }}
-                >
+                <div className="message-box scrollable" style={{ height: "476px" }}>
                   <div className="message-widget message-scroll">
-                    <a
-                      href="#"
-                      className="d-flex align-items-center border-bottom p-3"
-                    >
+                    <a href="#" className="d-flex align-items-center border-bottom p-3">
                       <div className="user-img position-relative d-inline-block mr-0 mr-md-3">
                         <img
                           src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/monster-bootstrap/package/assets/images/users/1.jpg"
@@ -529,24 +482,17 @@ const Home: React.FC = () => {
                       </div>
                       <div className="w-85 d-md-flex align-items-center v-middle ps-3">
                         <div className="w-85">
-                          <h5 className="mb-0 mt-1 font-weight-medium">
-                            Pavan kumar
-                          </h5>
+                          <h5 className="mb-0 mt-1 font-weight-medium">Pavan kumar</h5>
                           <span className="fs-3 text-nowrap d-block text-truncate mail-desc text-muted fw-normal">
-                            Lorem Ipsum is simply dummy text of the printing and
-                            type setting industry. Lorem Ipsum has been.
+                            Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has
+                            been.
                           </span>
                         </div>
-                        <span className="fs-2 text-nowrap ms-auto time fw-normal">
-                          9:30 AM
-                        </span>
+                        <span className="fs-2 text-nowrap ms-auto time fw-normal">9:30 AM</span>
                       </div>
                     </a>
 
-                    <a
-                      href="#"
-                      className="d-flex align-items-center border-bottom p-3"
-                    >
+                    <a href="#" className="d-flex align-items-center border-bottom p-3">
                       <div className="user-img position-relative d-inline-block mr-0 mr-md-3">
                         <img
                           src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/monster-bootstrap/package/assets/images/users/2.jpg"
@@ -557,49 +503,32 @@ const Home: React.FC = () => {
                       </div>
                       <div className="w-85 d-md-flex align-items-center v-middle ps-3">
                         <div className="w-85">
-                          <h5 className="mb-0 mt-1 font-weight-medium">
-                            Sonu Nigam
-                          </h5>
+                          <h5 className="mb-0 mt-1 font-weight-medium">Sonu Nigam</h5>
                           <span className="fs-3 text-nowrap d-block text-truncate mail-desc text-muted fw-normal">
                             I've sung a song! See you at
                           </span>
                         </div>
-                        <span className="fs-2 text-nowrap ms-auto time fw-normal">
-                          9:10 AM
-                        </span>
+                        <span className="fs-2 text-nowrap ms-auto time fw-normal">9:10 AM</span>
                       </div>
                     </a>
 
-                    <a
-                      href="#"
-                      className="d-flex align-items-center border-bottom p-3"
-                    >
+                    <a href="#" className="d-flex align-items-center border-bottom p-3">
                       <div className="user-img position-relative d-inline-block mr-0 mr-md-3">
-                        <span className="round bg-info d-inline-block text-white text-center rounded-circle">
-                          A
-                        </span>
+                        <span className="round bg-info d-inline-block text-white text-center rounded-circle">A</span>
                         <span className="profile-status rounded-circle away"></span>
                       </div>
                       <div className="w-85 d-md-flex align-items-center v-middle ps-3">
                         <div className="w-85">
-                          <h5 className="mb-0 mt-1 font-weight-medium">
-                            Arijit Sinh
-                          </h5>
+                          <h5 className="mb-0 mt-1 font-weight-medium">Arijit Sinh</h5>
                           <span className="fs-3 text-nowrap d-block text-truncate mail-desc text-muted fw-normal">
-                            Simply dummy text of the printing and typesetting
-                            industry.
+                            Simply dummy text of the printing and typesetting industry.
                           </span>
                         </div>
-                        <span className="fs-2 text-nowrap ms-auto time fw-normal">
-                          9:08 AM
-                        </span>
+                        <span className="fs-2 text-nowrap ms-auto time fw-normal">9:08 AM</span>
                       </div>
                     </a>
 
-                    <a
-                      href="#"
-                      className="d-flex align-items-center border-bottom p-3"
-                    >
+                    <a href="#" className="d-flex align-items-center border-bottom p-3">
                       <div className="user-img position-relative d-inline-block mr-0 mr-md-3">
                         <img
                           src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/monster-bootstrap/package/assets/images/users/4.jpg"
@@ -610,23 +539,16 @@ const Home: React.FC = () => {
                       </div>
                       <div className="w-85 d-md-flex align-items-center v-middle ps-3">
                         <div className="w-85">
-                          <h5 className="mb-0 mt-1 font-weight-medium">
-                            Pavan kumar
-                          </h5>
+                          <h5 className="mb-0 mt-1 font-weight-medium">Pavan kumar</h5>
                           <span className="fs-3 text-nowrap d-block text-truncate mail-desc text-muted fw-normal">
                             Just see the my admin!
                           </span>
                         </div>
-                        <span className="fs-2 text-nowrap ms-auto time fw-normal">
-                          9:02 AM
-                        </span>
+                        <span className="fs-2 text-nowrap ms-auto time fw-normal">9:02 AM</span>
                       </div>
                     </a>
 
-                    <a
-                      href="#"
-                      className="d-flex align-items-center border-bottom p-3"
-                    >
+                    <a href="#" className="d-flex align-items-center border-bottom p-3">
                       <div className="user-img position-relative d-inline-block mr-0 mr-md-3">
                         <img
                           src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/monster-bootstrap/package/assets/images/users/1.jpg"
@@ -637,23 +559,16 @@ const Home: React.FC = () => {
                       </div>
                       <div className="w-85 d-md-flex align-items-center v-middle ps-3">
                         <div className="w-85">
-                          <h5 className="mb-0 mt-1 font-weight-medium">
-                            Pavan kumar
-                          </h5>
+                          <h5 className="mb-0 mt-1 font-weight-medium">Pavan kumar</h5>
                           <span className="fs-3 text-nowrap d-block text-truncate mail-desc text-muted fw-normal">
                             Welcome to the Elite Admin
                           </span>
                         </div>
-                        <span className="fs-2 text-nowrap ms-auto time fw-normal">
-                          9:30 AM
-                        </span>
+                        <span className="fs-2 text-nowrap ms-auto time fw-normal">9:30 AM</span>
                       </div>
                     </a>
 
-                    <a
-                      href="#"
-                      className="d-flex align-items-center border-bottom p-3"
-                    >
+                    <a href="#" className="d-flex align-items-center border-bottom p-3">
                       <div className="user-img position-relative d-inline-block mr-0 mr-md-3">
                         <img
                           src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/monster-bootstrap/package/assets/images/users/2.jpg"
@@ -664,23 +579,16 @@ const Home: React.FC = () => {
                       </div>
                       <div className="w-85 d-md-flex align-items-center v-middle ps-3">
                         <div className="w-85">
-                          <h5 className="mb-0 mt-1 font-weight-medium">
-                            Sonu Nigam
-                          </h5>
+                          <h5 className="mb-0 mt-1 font-weight-medium">Sonu Nigam</h5>
                           <span className="fs-3 text-nowrap d-block text-truncate mail-desc text-muted fw-normal">
                             I've sung a song! See you at
                           </span>
                         </div>
-                        <span className="fs-2 text-nowrap ms-auto time fw-normal">
-                          9:10 AM
-                        </span>
+                        <span className="fs-2 text-nowrap ms-auto time fw-normal">9:10 AM</span>
                       </div>
                     </a>
 
-                    <a
-                      href="#"
-                      className="d-flex align-items-center border-bottom p-3"
-                    >
+                    <a href="#" className="d-flex align-items-center border-bottom p-3">
                       <div className="user-img position-relative d-inline-block mr-0 mr-md-3">
                         <img
                           src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/monster-bootstrap/package/assets/images/users/3.jpg"
@@ -691,16 +599,12 @@ const Home: React.FC = () => {
                       </div>
                       <div className="w-85 d-md-flex align-items-center v-middle ps-3">
                         <div className="w-85">
-                          <h5 className="mb-0 mt-1 font-weight-medium">
-                            Arijit Sinh
-                          </h5>
+                          <h5 className="mb-0 mt-1 font-weight-medium">Arijit Sinh</h5>
                           <span className="fs-3 text-nowrap d-block text-truncate mail-desc text-muted fw-normal">
                             I am a singer!
                           </span>
                         </div>
-                        <span className="fs-2 text-nowrap ms-auto time fw-normal">
-                          9:08 AM
-                        </span>
+                        <span className="fs-2 text-nowrap ms-auto time fw-normal">9:08 AM</span>
                       </div>
                     </a>
 
@@ -715,16 +619,12 @@ const Home: React.FC = () => {
                       </div>
                       <div className="w-85 d-md-flex align-items-center v-middle ps-3">
                         <div className="w-85">
-                          <h5 className="mb-0 mt-1 font-weight-medium">
-                            Pavan kumar
-                          </h5>
+                          <h5 className="mb-0 mt-1 font-weight-medium">Pavan kumar</h5>
                           <span className="fs-3 text-nowrap d-block text-truncate mail-desc text-muted fw-normal">
                             Just see the my admin!
                           </span>
                         </div>
-                        <span className="fs-2 text-nowrap ms-auto time fw-normal">
-                          9:02
-                        </span>
+                        <span className="fs-2 text-nowrap ms-auto time fw-normal">9:02</span>
                       </div>
                     </a>
                   </div>
@@ -753,43 +653,26 @@ const Home: React.FC = () => {
                   <table className="table stylish-table mb-0 mt-2 no-wrap v-middle">
                     <thead>
                       <tr>
-                        <th
-                          className="fw-normal text-muted border-0 border-bottom"
-                          colSpan={2}
-                        >
+                        <th className="fw-normal text-muted border-0 border-bottom" colSpan={2}>
                           Assigned
                         </th>
-                        <th className="fw-normal text-muted border-0 border-bottom">
-                          Name
-                        </th>
-                        <th className="fw-normal text-muted border-0 border-bottom">
-                          Priority
-                        </th>
-                        <th className="fw-normal text-muted border-0 border-bottom">
-                          Budget
-                        </th>
+                        <th className="fw-normal text-muted border-0 border-bottom">Name</th>
+                        <th className="fw-normal text-muted border-0 border-bottom">Priority</th>
+                        <th className="fw-normal text-muted border-0 border-bottom">Budget</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td style={{ width: "50px" }}>
-                          <span className="round rounded-circle text-white d-inline-block text-center bg-info">
-                            S
-                          </span>
+                          <span className="round rounded-circle text-white d-inline-block text-center bg-info">S</span>
                         </td>
                         <td>
-                          <h6 className="font-weight-medium mb-0 nowrap">
-                            Sunil Joshi
-                          </h6>
-                          <small className="text-muted no-wrap">
-                            Web Designer
-                          </small>
+                          <h6 className="font-weight-medium mb-0 nowrap">Sunil Joshi</h6>
+                          <small className="text-muted no-wrap">Web Designer</small>
                         </td>
                         <td>Elite Admin</td>
                         <td>
-                          <span className="badge bg-light-success text-success">
-                            Low
-                          </span>
+                          <span className="badge bg-light-success text-success">Low</span>
                         </td>
                         <td>$3.9K</td>
                       </tr>
@@ -805,18 +688,12 @@ const Home: React.FC = () => {
                           </span>
                         </td>
                         <td>
-                          <h6 className="font-weight-medium mb-0 nowrap">
-                            Andrew
-                          </h6>
-                          <small className="text-muted no-wrap">
-                            Project Manager
-                          </small>
+                          <h6 className="font-weight-medium mb-0 nowrap">Andrew</h6>
+                          <small className="text-muted no-wrap">Project Manager</small>
                         </td>
                         <td>Real Homes</td>
                         <td>
-                          <span className="badge bg-light-info text-info">
-                            Medium
-                          </span>
+                          <span className="badge bg-light-info text-info">Medium</span>
                         </td>
                         <td>$23.9K</td>
                       </tr>
@@ -827,18 +704,12 @@ const Home: React.FC = () => {
                           </span>
                         </td>
                         <td>
-                          <h6 className="font-weight-medium mb-0 nowrap">
-                            Bhavesh patel
-                          </h6>
-                          <small className="text-muted no-wrap">
-                            Developer
-                          </small>
+                          <h6 className="font-weight-medium mb-0 nowrap">Bhavesh patel</h6>
+                          <small className="text-muted no-wrap">Developer</small>
                         </td>
                         <td>MedicalPro Theme</td>
                         <td>
-                          <span className="badge bg-light-danger text-danger">
-                            High
-                          </span>
+                          <span className="badge bg-light-danger text-danger">High</span>
                         </td>
                         <td>$12.9K</td>
                       </tr>
@@ -849,18 +720,12 @@ const Home: React.FC = () => {
                           </span>
                         </td>
                         <td>
-                          <h6 className="font-weight-medium mb-0 nowrap">
-                            Nirav Joshi
-                          </h6>
-                          <small className="text-muted no-wrap">
-                            Frontend Eng
-                          </small>
+                          <h6 className="font-weight-medium mb-0 nowrap">Nirav Joshi</h6>
+                          <small className="text-muted no-wrap">Frontend Eng</small>
                         </td>
                         <td>Elite Admin</td>
                         <td>
-                          <span className="badge bg-light-success text-success">
-                            Low
-                          </span>
+                          <span className="badge bg-light-success text-success">Low</span>
                         </td>
                         <td>$10.9K</td>
                       </tr>
@@ -871,18 +736,12 @@ const Home: React.FC = () => {
                           </span>
                         </td>
                         <td>
-                          <h6 className="font-weight-medium mb-0 nowrap">
-                            Micheal Doe
-                          </h6>
-                          <small className="text-muted no-wrap">
-                            Content Writer
-                          </small>
+                          <h6 className="font-weight-medium mb-0 nowrap">Micheal Doe</h6>
+                          <small className="text-muted no-wrap">Content Writer</small>
                         </td>
                         <td>Helping Hands</td>
                         <td>
-                          <span className="badge bg-light-danger text-danger">
-                            High
-                          </span>
+                          <span className="badge bg-light-danger text-danger">High</span>
                         </td>
                         <td>$12.9K</td>
                       </tr>
@@ -893,38 +752,26 @@ const Home: React.FC = () => {
                           </span>
                         </td>
                         <td>
-                          <h6 className="font-weight-medium mb-0 nowrap">
-                            Johnathan
-                          </h6>
+                          <h6 className="font-weight-medium mb-0 nowrap">Johnathan</h6>
                           <small className="text-muted no-wrap">Graphic</small>
                         </td>
                         <td>Digital Agency</td>
                         <td>
-                          <span className="badge bg-light-danger text-danger">
-                            High
-                          </span>
+                          <span className="badge bg-light-danger text-danger">High</span>
                         </td>
                         <td>$2.6K</td>
                       </tr>
                       <tr>
                         <td>
-                          <span className="round rounded-circle text-white d-inline-block text-center bg-info">
-                            M
-                          </span>
+                          <span className="round rounded-circle text-white d-inline-block text-center bg-info">M</span>
                         </td>
                         <td>
-                          <h6 className="font-weight-medium mb-0 nowrap">
-                            Micheal Doe
-                          </h6>
-                          <small className="text-muted no-wrap">
-                            Content Writer
-                          </small>
+                          <h6 className="font-weight-medium mb-0 nowrap">Micheal Doe</h6>
+                          <small className="text-muted no-wrap">Content Writer</small>
                         </td>
                         <td>Helping Hands</td>
                         <td>
-                          <span className="badge bg-light-info text-info">
-                            Medium
-                          </span>
+                          <span className="badge bg-light-info text-info">Medium</span>
                         </td>
                         <td>$12.9K</td>
                       </tr>
@@ -983,36 +830,28 @@ const Home: React.FC = () => {
                 <ul className="list-unstyled row text-center city-weather-days border-top m-0 pt-3">
                   <li className="col col-6 col-md-3 text-center mt-2 pt-1">
                     <i className="d-block fs-6 text-info wi wi-day-sunny"></i>
-                    <span className="d-block tetxt-muted text-nowrap pt-2">
-                      09:30
-                    </span>
+                    <span className="d-block tetxt-muted text-nowrap pt-2">09:30</span>
                     <h3 className="fw-light mt-1">
                       70<sup>°</sup>
                     </h3>
                   </li>
                   <li className="col col-6 col-md-3 text-center mt-2 pt-1">
                     <i className="d-block fs-6 text-info wi wi-day-cloudy"></i>
-                    <span className="d-block tetxt-muted text-nowrap pt-2">
-                      11:30
-                    </span>
+                    <span className="d-block tetxt-muted text-nowrap pt-2">11:30</span>
                     <h3 className="fw-light mt-1">
                       72<sup>°</sup>
                     </h3>
                   </li>
                   <li className="col col-6 col-md-3 text-center mt-2 pt-1">
                     <i className="d-block fs-6 text-info wi wi-day-hail"></i>
-                    <span className="d-block tetxt-muted text-nowrap pt-2">
-                      13:30
-                    </span>
+                    <span className="d-block tetxt-muted text-nowrap pt-2">13:30</span>
                     <h3 className="fw-light mt-1">
                       75<sup>°</sup>
                     </h3>
                   </li>
                   <li className="col col-6 col-md-3 text-center mt-2 pt-1">
                     <i className="d-block fs-6 text-info wi wi-day-sprinkle"></i>
-                    <span className="d-block tetxt-muted text-nowrap pt-2">
-                      15:30
-                    </span>
+                    <span className="d-block tetxt-muted text-nowrap pt-2">15:30</span>
                     <h3 className="fw-light mt-1">
                       76<sup>°</sup>
                     </h3>
@@ -1036,11 +875,7 @@ const Home: React.FC = () => {
                   <span>20 May 2021</span>
                   <div className="ms-auto">
                     <a className="link fw-light text-muted">
-                      <i
-                        data-feather="message-circle"
-                        className="feather-sm me-2"
-                      ></i>
-                      3 Comments
+                      <i data-feather="message-circle" className="feather-sm me-2"></i>3 Comments
                     </a>
                   </div>
                 </div>
@@ -1061,11 +896,7 @@ const Home: React.FC = () => {
                   <span>20 May 2021</span>
                   <div className="ms-auto">
                     <a className="link fw-light text-muted">
-                      <i
-                        data-feather="message-circle"
-                        className="feather-sm me-2"
-                      ></i>
-                      1 Comment
+                      <i data-feather="message-circle" className="feather-sm me-2"></i>1 Comment
                     </a>
                   </div>
                 </div>
@@ -1086,11 +917,7 @@ const Home: React.FC = () => {
                   <span>20 May 2021</span>
                   <div className="ms-auto">
                     <a className="link fw-light text-muted">
-                      <i
-                        data-feather="message-circle"
-                        className="feather-sm me-2"
-                      ></i>
-                      5 Comments
+                      <i data-feather="message-circle" className="feather-sm me-2"></i>5 Comments
                     </a>
                   </div>
                 </div>
@@ -1107,10 +934,7 @@ const Home: React.FC = () => {
                 <h4 className="card-title">Recent Comments</h4>
               </div>
 
-              <div
-                className="comment-widgets scrollable position-relative mb-2"
-                style={{ height: "450px" }}
-              >
+              <div className="comment-widgets scrollable position-relative mb-2" style={{ height: "450px" }}>
                 <div className="d-flex flex-row comment-row p-2 p-md-3">
                   <div className="p-1 p-md-2">
                     <span className="round text-white d-inline-block text-center">
@@ -1125,14 +949,11 @@ const Home: React.FC = () => {
                   <div className="comment-text w-100 py-1 py-md-3 pr-md-3 pl-md-4 px-2">
                     <h5>James Anderson</h5>
                     <p className="mb-1 fs-3 fw-light text-muted">
-                      Lorem Ipsum is simply dummy text of the printing and type
-                      setting industry. Lorem Ipsum has beenorem Ipsum is simply
-                      dummy text of the printing and type setting industry.
+                      Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has
+                      beenorem Ipsum is simply dummy text of the printing and type setting industry.
                     </p>
                     <div className="comment-footer d-md-flex align-items-center mt-2">
-                      <span className="badge bg-light-info text-info">
-                        Pending
-                      </span>
+                      <span className="badge bg-light-info text-info">Pending</span>
                       <span className="action-icons">
                         <a className="ps-2 align-middle">
                           <i className="ti-pencil-alt"></i>
@@ -1144,9 +965,7 @@ const Home: React.FC = () => {
                           <i className="ti-heart"></i>
                         </a>
                       </span>
-                      <span className="text-muted ms-auto d-block text-end fs-2 fw-normal">
-                        April 14, 2016
-                      </span>
+                      <span className="text-muted ms-auto d-block text-end fs-2 fw-normal">April 14, 2016</span>
                     </div>
                   </div>
                 </div>
@@ -1165,14 +984,11 @@ const Home: React.FC = () => {
                   <div className="comment-text active w-100 py-1 py-md-3 pr-md-3 pl-md-4 px-2">
                     <h5>Michael Jorden</h5>
                     <p className="mb-1 fs-3 fw-light text-muted">
-                      Lorem Ipsum is simply dummy text of the printing and type
-                      setting industry. Lorem Ipsum has beenorem Ipsum is simply
-                      dummy text of the printing and type setting industry..
+                      Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has
+                      beenorem Ipsum is simply dummy text of the printing and type setting industry..
                     </p>
                     <div className="comment-footer d-md-flex align-items-center mt-2">
-                      <span className="badge bg-light-success text-success">
-                        Approved
-                      </span>
+                      <span className="badge bg-light-success text-success">Approved</span>
                       <span className="action-icons active">
                         <a className="ps-2 align-middle">
                           <i className="ti-pencil-alt"></i>
@@ -1184,9 +1000,7 @@ const Home: React.FC = () => {
                           <i className="ti-heart text-danger"></i>
                         </a>
                       </span>
-                      <span className="text-muted ms-auto d-block text-end fs-2 fw-normal">
-                        April 14, 2016
-                      </span>
+                      <span className="text-muted ms-auto d-block text-end fs-2 fw-normal">April 14, 2016</span>
                     </div>
                   </div>
                 </div>
@@ -1205,14 +1019,11 @@ const Home: React.FC = () => {
                   <div className="comment-text w-100 py-1 py-md-3 pr-md-3 pl-md-4 px-2">
                     <h5>Johnathan Doeting</h5>
                     <p className="mb-1 fs-3 fw-light text-muted">
-                      Lorem Ipsum is simply dummy text of the printing and type
-                      setting industry. Lorem Ipsum has beenorem Ipsum is simply
-                      dummy text of the printing and type setting industry.
+                      Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has
+                      beenorem Ipsum is simply dummy text of the printing and type setting industry.
                     </p>
                     <div className="comment-footer d-md-flex align-items-center mt-2">
-                      <span className="badge bg-light-danger text-danger">
-                        Rejected
-                      </span>
+                      <span className="badge bg-light-danger text-danger">Rejected</span>
                       <span className="action-icons">
                         <a className="ps-2 align-middle">
                           <i className="ti-pencil-alt"></i>
@@ -1224,9 +1035,7 @@ const Home: React.FC = () => {
                           <i className="ti-heart"></i>
                         </a>
                       </span>
-                      <span className="text-muted ms-auto d-block text-end fs-2 fw-normal">
-                        April 14, 2016
-                      </span>
+                      <span className="text-muted ms-auto d-block text-end fs-2 fw-normal">April 14, 2016</span>
                     </div>
                   </div>
                 </div>
@@ -1245,14 +1054,11 @@ const Home: React.FC = () => {
                   <div className="comment-text w-100 py-1 py-md-3 pr-md-3 pl-md-4 px-2">
                     <h5>James Anderson</h5>
                     <p className="mb-1 fs-3 fw-light text-muted">
-                      Lorem Ipsum is simply dummy text of the printing and type
-                      setting industry. Lorem Ipsum has beenorem Ipsum is simply
-                      dummy text of the printing and type setting industry..
+                      Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has
+                      beenorem Ipsum is simply dummy text of the printing and type setting industry..
                     </p>
                     <div className="comment-footer d-md-flex align-items-center mt-2">
-                      <span className="badge bg-light-info text-info">
-                        Pending
-                      </span>
+                      <span className="badge bg-light-info text-info">Pending</span>
                       <span className="action-icons">
                         <a className="ps-2 align-middle">
                           <i className="ti-pencil-alt"></i>
@@ -1264,9 +1070,7 @@ const Home: React.FC = () => {
                           <i className="ti-heart"></i>
                         </a>
                       </span>
-                      <span className="text-muted ms-auto d-block text-end fs-2 fw-normal">
-                        April 14, 2016
-                      </span>
+                      <span className="text-muted ms-auto d-block text-end fs-2 fw-normal">April 14, 2016</span>
                     </div>
                   </div>
                 </div>
@@ -1289,57 +1093,30 @@ const Home: React.FC = () => {
                   </div>
                 </div>
 
-                <div
-                  className="modal fade"
-                  id="myModal"
-                  tabIndex={-1}
-                  role="dialog"
-                  aria-hidden="true"
-                >
+                <div className="modal fade" id="myModal" tabIndex={-1} role="dialog" aria-hidden="true">
                   <div className="modal-dialog" role="document">
                     <div className="modal-content">
                       <div className="modal-header d-flex align-items-center">
                         <h4 className="modal-title">Add Task</h4>
-                        <button
-                          type="button"
-                          className="btn-close"
-                          data-bs-dismiss="modal"
-                          aria-label="Close"
-                        ></button>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div className="modal-body">
                         <form>
                           <div className="mb-3">
                             <label>Name</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Enter Your Name"
-                            />
+                            <input type="text" className="form-control" placeholder="Enter Your Name" />
                           </div>
                           <div className="mb-3">
                             <label>Email address</label>
-                            <input
-                              type="email"
-                              className="form-control"
-                              placeholder="Enter email"
-                            />
+                            <input type="email" className="form-control" placeholder="Enter email" />
                           </div>
                         </form>
                       </div>
                       <div className="modal-footer">
-                        <button
-                          type="button"
-                          className="btn btn-secondary"
-                          data-bs-dismiss="modal"
-                        >
+                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                           Close
                         </button>
-                        <button
-                          type="button"
-                          className="btn btn-success"
-                          data-bs-dismiss="modal"
-                        >
+                        <button type="button" className="btn btn-success" data-bs-dismiss="modal">
                           Submit
                         </button>
                       </div>
@@ -1347,18 +1124,9 @@ const Home: React.FC = () => {
                   </div>
                 </div>
 
-                <div
-                  className="to-do-widget mt-3 scrollable"
-                  style={{ height: "444px" }}
-                >
-                  <ul
-                    className="list-task todo-list list-group mb-0"
-                    data-role="tasklist"
-                  >
-                    <li
-                      className="list-group-item border-0 mb-0 py-3 pe-3 ps-0"
-                      data-role="task"
-                    >
+                <div className="to-do-widget mt-3 scrollable" style={{ height: "444px" }}>
+                  <ul className="list-task todo-list list-group mb-0" data-role="tasklist">
+                    <li className="list-group-item border-0 mb-0 py-3 pe-3 ps-0" data-role="task">
                       <div className="form-check border-start border-2 border-info ps-1">
                         <input
                           type="checkbox"
@@ -1366,10 +1134,7 @@ const Home: React.FC = () => {
                           id="inputSchedule"
                           name="inputCheckboxesSchedule"
                         />
-                        <label
-                          htmlFor="inputSchedule"
-                          className="form-check-label ps-2"
-                        >
+                        <label htmlFor="inputSchedule" className="form-check-label ps-2">
                           <span>Schedule meeting with</span>
                         </label>
                       </div>
@@ -1420,10 +1185,7 @@ const Home: React.FC = () => {
                         </li>
                       </ul>
                     </li>
-                    <li
-                      className="list-group-item border-0 mb-0 py-3 pe-3 ps-0"
-                      data-role="task"
-                    >
+                    <li className="list-group-item border-0 mb-0 py-3 pe-3 ps-0" data-role="task">
                       <div className="form-check border-start border-2 border-danger ps-1 d-flex">
                         <input
                           type="checkbox"
@@ -1431,14 +1193,9 @@ const Home: React.FC = () => {
                           id="inputCall"
                           name="inputCheckboxesCall"
                         />
-                        <label
-                          htmlFor="inputCall"
-                          className="form-check-label ps-2"
-                        >
+                        <label htmlFor="inputCall" className="form-check-label ps-2">
                           <span>Give Purchase report to</span>
-                          <span className="badge bg-light-danger text-danger">
-                            Today
-                          </span>
+                          <span className="badge bg-light-danger text-danger">Today</span>
                         </label>
                       </div>
                       <ul className="assignedto list-inline m-0 ps-4 ms-3 mt-2">
@@ -1466,10 +1223,7 @@ const Home: React.FC = () => {
                         </li>
                       </ul>
                     </li>
-                    <li
-                      className="list-group-item border-0 mb-0 py-3 pe-3 ps-0"
-                      data-role="task"
-                    >
+                    <li className="list-group-item border-0 mb-0 py-3 pe-3 ps-0" data-role="task">
                       <div className="form-check border-start border-2 border-primary ps-1">
                         <input
                           type="checkbox"
@@ -1477,21 +1231,13 @@ const Home: React.FC = () => {
                           id="inputBook"
                           name="inputCheckboxesBook"
                         />
-                        <label
-                          htmlFor="inputBook"
-                          className="form-check-label ps-2"
-                        >
+                        <label htmlFor="inputBook" className="form-check-label ps-2">
                           <span>Book flight for holiday</span>
                         </label>
                       </div>
-                      <div className="item-date fs-2 ps-4 ms-3 text-muted d-inline-block">
-                        26 jun 2021
-                      </div>
+                      <div className="item-date fs-2 ps-4 ms-3 text-muted d-inline-block">26 jun 2021</div>
                     </li>
-                    <li
-                      className="list-group-item border-0 mb-0 py-3 pe-3 ps-0"
-                      data-role="task"
-                    >
+                    <li className="list-group-item border-0 mb-0 py-3 pe-3 ps-0" data-role="task">
                       <div className="form-check border-start border-2 border-warning ps-1">
                         <input
                           type="checkbox"
@@ -1499,24 +1245,14 @@ const Home: React.FC = () => {
                           id="inputForward"
                           name="inputCheckboxesForward"
                         />
-                        <label
-                          htmlFor="inputForward"
-                          className="form-check-label ps-2"
-                        >
+                        <label htmlFor="inputForward" className="form-check-label ps-2">
                           <span>Forward all tasks</span>
-                          <span className="badge bg-light-warning text-warning">
-                            2 weeks
-                          </span>
+                          <span className="badge bg-light-warning text-warning">2 weeks</span>
                         </label>
                       </div>
-                      <div className="item-date fs-2 ps-4 ms-3 text-muted d-inline-block">
-                        26 jun 2021
-                      </div>
+                      <div className="item-date fs-2 ps-4 ms-3 text-muted d-inline-block">26 jun 2021</div>
                     </li>
-                    <li
-                      className="list-group-item border-0 mb-0 py-3 pe-3 ps-0"
-                      data-role="task"
-                    >
+                    <li className="list-group-item border-0 mb-0 py-3 pe-3 ps-0" data-role="task">
                       <div className="form-check border-start border-2 border-primary ps-1">
                         <input
                           type="checkbox"
@@ -1524,21 +1260,13 @@ const Home: React.FC = () => {
                           id="inputRecieve"
                           name="inputCheckboxesRecieve"
                         />
-                        <label
-                          htmlFor="inputRecieve"
-                          className="form-check-label ps-2"
-                        >
+                        <label htmlFor="inputRecieve" className="form-check-label ps-2">
                           <span>Recieve shipment</span>
                         </label>
                       </div>
-                      <div className="item-date fs-2 ps-4 ms-3 text-muted d-inline-block">
-                        26 jun 2021
-                      </div>
+                      <div className="item-date fs-2 ps-4 ms-3 text-muted d-inline-block">26 jun 2021</div>
                     </li>
-                    <li
-                      className="list-group-item border-0 mb-0 py-3 pe-3 ps-0"
-                      data-role="task"
-                    >
+                    <li className="list-group-item border-0 mb-0 py-3 pe-3 ps-0" data-role="task">
                       <div className="form-check border-start border-2 border-info ps-1">
                         <input
                           type="checkbox"
@@ -1546,21 +1274,13 @@ const Home: React.FC = () => {
                           id="inputpayment"
                           name="inputCheckboxespayment"
                         />
-                        <label
-                          htmlFor="inputpayment"
-                          className="form-check-label ps-2"
-                        >
+                        <label htmlFor="inputpayment" className="form-check-label ps-2">
                           <span>Send payment today</span>
                         </label>
                       </div>
-                      <div className="item-date fs-2 ps-4 ms-3 text-muted d-inline-block">
-                        26 jun 2021
-                      </div>
+                      <div className="item-date fs-2 ps-4 ms-3 text-muted d-inline-block">26 jun 2021</div>
                     </li>
-                    <li
-                      className="list-group-item border-0 mb-0 py-3 pe-3 ps-0"
-                      data-role="task"
-                    >
+                    <li className="list-group-item border-0 mb-0 py-3 pe-3 ps-0" data-role="task">
                       <div className="form-check border-start border-2 border-success ps-1">
                         <input
                           type="checkbox"
@@ -1568,14 +1288,9 @@ const Home: React.FC = () => {
                           id="inputForward2"
                           name="inputCheckboxesd"
                         />
-                        <label
-                          htmlFor="inputForward2"
-                          className="form-check-label ps-2"
-                        >
+                        <label htmlFor="inputForward2" className="form-check-label ps-2">
                           <span>Important tasks</span>
-                          <span className="badge bg-light-success text-success">
-                            2 weeks
-                          </span>
+                          <span className="badge bg-light-success text-success">2 weeks</span>
                         </label>
                       </div>
                       <ul className="assignedto list-inline m-0 ps-4 ms-3 mt-2">
