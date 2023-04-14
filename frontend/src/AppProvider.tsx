@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import React from "react";
 import App from "./App";
-import ReduxProvider from "./redux";
+import ReduxProvider from "@/redux/reducerprovider";
 
 const AppProvider: React.FC = () => {
   return (

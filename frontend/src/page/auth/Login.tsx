@@ -1,6 +1,24 @@
-import React from "react";
+import { useAppDispatch } from "@/hooks/useRedux";
+import action from "@/redux/reduceraction";
+import React, { useEffect } from "react";
 
 const Login: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const onLogin = () => {
+    setTimeout(() => {
+      dispatch(
+        action.auth.changeAuthForm({
+          accessToken: "AAA",
+          name: "Johny",
+          phoneNumber: "0219232",
+        })
+      );
+    });
+  };
+
+  useEffect(() => {}, []);
+
   return (
     <div>
       <div

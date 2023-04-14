@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import { AnyAction, Dispatch } from "@reduxjs/toolkit";
-import action from "../../redux/reduceraction";
+import action from "@/redux/reduceraction";
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -13,6 +13,10 @@ const Home: React.FC = () => {
       // dispatch(action.auth.changeAuthForm({ accessToken: "AA", name: "Junaedi", phoneNumber: "0912312323" }));
       console.log(dispatch);
     });
+
+    // setTimeout(() => {
+    //   dispatch(action.auth.reset());
+    // }, 5000);
   }, []);
 
   return (

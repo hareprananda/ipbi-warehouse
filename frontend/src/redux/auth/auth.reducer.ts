@@ -10,6 +10,11 @@ const AuthReducer = createSlice({
       state = action.payload;
       return state;
     },
+
+    reset: (state) => {
+      state = AuthState;
+      return state;
+    },
   },
 });
 
