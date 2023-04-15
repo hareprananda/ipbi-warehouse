@@ -1,69 +1,107 @@
+import Form from "@/component/form/Form";
+import TextField from "@/component/form/TextField/TextField";
 import { useAppDispatch } from "@/hooks/useRedux";
+import { faLock } from "@fortawesome/free-solid-svg-icons";
 import action from "@/redux/reduceraction";
-import React, { useEffect } from "react";
+import authApi from "@/req/auth";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as yup from "yup";
+import logo from "@/assets/images/logo.png";
+import useStyle from "./Login.style";
+
+const validationObj = yup.object({
+  phoneNumber: yup.string().required("Nomor telepon harus diisi").typeError("Nomor telepon harus diisi"),
+  password: yup.string().required("Password harus diisi"),
+});
 
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
-
-  const onLogin = () => {
-    setTimeout(() => {
-      dispatch(
-        action.auth.changeAuthForm({
-          accessToken: "AAA",
-          name: "Johny",
-          phoneNumber: "0219232",
-        })
-      );
+  const [error, setError] = useState("");
+  const { classes } = useStyle();
+  const submitLogin = (val: { phoneNumber: string; password: string }) => {
+    dispatch(action.ui.showLoading());
+    dispatch(authApi.login(val)).then((res) => {
+      dispatch(action.ui.dismissLoading());
+      if (res.data) {
+        dispatch(action.auth.changeAuthForm(res.data));
+        console.log(res.data);
+      } else {
+        setError(res.message[0]);
+      }
     });
   };
-
-  useEffect(() => {}, []);
+  const onForgotPassword = () => {
+    dispatch(
+      action.ui.showStatusModal({
+        message: "Mohon hubungi admin untuk mereset ulang password anda",
+        type: "info",
+      })
+    );
+  };
 
   return (
     <div>
       <div
-        className="
+        className={`
           auth-wrapper
           d-flex
           no-block
           justify-content-center
           align-items-center
-        "
-        style={{
-          background: `url(../assets/images/background/login-register.jpg)
-            no-repeat center center`,
-          backgroundSize: "cover",
-        }}
+          ${classes.container}
+        `}
       >
-        <div className="auth-box p-4 bg-white rounded">
+        <div className={classes.backgroundOverflow} />
+        <div className="auth-box p-4 bg-white rounded" style={{ zIndex: 2 }}>
           <div id="loginform">
             <div className="logo">
+              <div className="d-flex justify-content-center">
+                <img src={logo} alt="logo" style={{ width: "155px" }} />
+              </div>
               <h3 className="box-title mb-3">Sign In</h3>
             </div>
-
+            {error && (
+              <div className="d-flex justify-content-center">
+                <span className="text-danger">
+                  <small>{error}</small>
+                </span>
+              </div>
+            )}
             <div className="row">
               <div className="col-12">
-                <form className="form-horizontal mt-3 form-material" id="loginform" action="index.html">
+                <Form validation={validationObj} onSubmit={submitLogin} className="form-horizontal mt-3 form-material">
                   <div className="form-group mb-3">
                     <div className="">
-                      <input className="form-control" type="text" required placeholder="Username" />
+                      <TextField
+                        field="phoneNumber"
+                        type="number"
+                        className="form-control"
+                        placeholder="Nomor Telepon"
+                      />
                     </div>
                   </div>
                   <div className="form-group mb-4">
                     <div className="">
-                      <input className="form-control" type="password" required placeholder="Password" />
+                      <TextField field="password" className="form-control" type="password" placeholder="Password" />
                     </div>
                   </div>
                   <div className="form-group">
                     <div className="d-flex">
-                      <div className="checkbox checkbox-info pt-0">
-                        <input id="checkbox-signup" type="checkbox" className="material-inputs chk-col-indigo" />
-                        <label htmlFor="checkbox-signup"> Remember me </label>
-                      </div>
                       <div className="ms-auto">
-                        <a href="#" id="to-recover" className="link font-weight-medium">
-                          <i className="fa fa-lock me-1"></i> Forgot pwd?
-                        </a>
+                        <div
+                          role="button"
+                          onClick={onForgotPassword}
+                          className="link font-weight-medium d-flex align-items-center"
+                        >
+                          <FontAwesomeIcon icon={faLock} />
+                          <span
+                            className="text-secondary"
+                            style={{ marginLeft: "5px", fontSize: "14px", fontWeight: 600 }}
+                          >
+                            Lupa Password?
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -82,53 +120,13 @@ const Login: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-xs-12 col-sm-12 col-md-12 mt-2 text-center">
-                      <div className="social mb-3">
-                        <a href="#" className="btn btn-facebook" data-bs-toggle="tooltip" title="Login with Facebook">
-                          <i aria-hidden="true" className="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" className="btn btn-googleplus" data-bs-toggle="tooltip" title="Login with Google">
-                          <i aria-hidden="true" className="fab fa-google"></i>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
                   <div className="form-group mb-0 mt-4">
                     <div className="col-sm-12 justify-content-center d-flex">
-                      <p>
-                        Don't have an account?
-                        <a href="authentication-register1.html" className="text-info font-weight-medium ms-1">
-                          Sign Up
-                        </a>
-                      </p>
+                      <p style={{ fontSize: "14px" }}>Hubungi Admin jika belum memiliki akun</p>
                     </div>
                   </div>
-                </form>
+                </Form>
               </div>
-            </div>
-          </div>
-          <div id="recoverform">
-            <div className="logo">
-              <h3 className="font-weight-medium mb-3">Recover Password</h3>
-              <span className="text-muted">Enter your Email and instructions will be sent to you!</span>
-            </div>
-            <div className="row mt-3 form-material">
-              <form className="col-12" action="index.html">
-                <div className="form-group row">
-                  <div className="col-12">
-                    <input className="form-control" type="email" required placeholder="Username" />
-                  </div>
-                </div>
-
-                <div className="row mt-3">
-                  <div className="col-12">
-                    <button className="btn d-block w-100 btn-primary text-uppercase" type="submit" name="action">
-                      Reset
-                    </button>
-                  </div>
-                </div>
-              </form>
             </div>
           </div>
         </div>

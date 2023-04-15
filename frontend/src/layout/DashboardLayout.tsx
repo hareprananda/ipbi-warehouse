@@ -559,10 +559,10 @@ const DashboardLayout: React.FC = () => {
                       Account Setting
                     </a>
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item" href="#">
+                    <div className="dropdown-item" onClick={() => dispatch(action.auth.reset())}>
                       <i data-feather="log-out" className="feather-sm text-danger me-1 ms-1"></i>
                       Logout
-                    </a>
+                    </div>
                     <div className="dropdown-divider"></div>
                     <div className="pl-4 p-2">
                       <a href="#" className="btn d-block w-100 btn-info rounded-pill">

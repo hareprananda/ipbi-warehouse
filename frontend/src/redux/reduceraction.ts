@@ -4,7 +4,7 @@ import RegisterReducer from "./registerreducer";
 type ReducerKey = (keyof typeof RegisterReducer)[];
 
 const action = (Object.keys(RegisterReducer) as ReducerKey).reduce((acc, key) => {
-  acc[key] = RegisterReducer[key].actions;
+  acc[key] = RegisterReducer[key].actions as any;
   return acc;
 }, {} as TypeReducer<"actions">);
 

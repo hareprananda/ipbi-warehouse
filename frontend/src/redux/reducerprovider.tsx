@@ -1,23 +1,23 @@
 import React, { PropsWithChildren } from "react";
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { configureStore, combineReducers, Action } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
 import RegisterReducer from "./registerreducer";
 import { TypeReducer } from "./reducer";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
-import thunkMiddleware from "redux-thunk";
+import thunkMiddleware, { ThunkDispatch } from "redux-thunk";
 
 type ReducerKey = (keyof typeof RegisterReducer)[];
 
 const reducer = combineReducers(
   (Object.keys(RegisterReducer) as ReducerKey).reduce((acc, key) => {
-    acc[key] = RegisterReducer[key].reducer;
+    acc[key] = RegisterReducer[key].reducer as any;
     return acc;
   }, {} as TypeReducer<"reducer">)
 );
 
-const persistedReducer = persistReducer({ key: "root", version: 1, storage }, reducer);
+const persistedReducer = persistReducer({ key: "root", version: 1, storage, blacklist: ["ui"] }, reducer);
 
 const store = configureStore({
   reducer: persistedReducer,
@@ -35,6 +35,6 @@ const ReduxProvider: React.FC<PropsWithChildren> = ({ children }) => {
 };
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type AppDispatch = ThunkDispatch<RootState, any, Action>;
 
 export default ReduxProvider;

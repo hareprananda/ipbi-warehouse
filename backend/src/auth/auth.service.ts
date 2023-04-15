@@ -24,7 +24,7 @@ export class AuthService {
       level: user.level,
     };
     returnedData['accessToken'] = await this.jwt.signAsync(returnedData);
-    return returnedData;
+    return HttpReturn(returnedData, 200);
   }
 
   async test() {
