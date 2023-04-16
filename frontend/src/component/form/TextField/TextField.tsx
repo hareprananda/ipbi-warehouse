@@ -4,6 +4,7 @@ import useStyle from "./TextField.style";
 
 interface Props extends HTMLProps<HTMLInputElement> {
   field: string;
+  prefix?: string;
   parentProps?: HTMLProps<HTMLDivElement>;
 }
 
@@ -14,6 +15,11 @@ const TextField: React.FC<Props> = (props) => {
 
   return (
     <div {...parentProps} className={`${parentProps?.className || ""} ${classes.inputContainer}`}>
+      {props.prefix ? (
+        <span className="input-group-text" style={{ backgroundColor: "transparent", border: "none", paddingLeft: 0 }}>
+          {props.prefix}
+        </span>
+      ) : null}
       <input {...register(field)} {...inputProps} />
       {errors[field] && (
         <span className="text-danger">
