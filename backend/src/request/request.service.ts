@@ -119,12 +119,12 @@ export class RequestService {
     try {
       const byTakeDate: RequestPerMonth[] = await this.prisma.$queryRaw`
       select r."takeDate" as "date", count(r."type") as "numberOfEvent"  from "Request" r
-      where status='APPROVE' and extract(month from r."takeDate")=${month} and extract(year from r."takeDate") = ${year}
+      where status in ('APPROVE','ONGOING') and extract(month from r."takeDate")=${month} and extract(year from r."takeDate") = ${year}
       group by r."takeDate";`;
 
       const byReturnDate: RequestPerMonth[] = await this.prisma.$queryRaw`
       select r."returnDate" as "date", count(r."type") as "numberOfEvent"  from "Request" r
-      where status='APPROVE' and extract(month from r."returnDate")=${month} and extract(year from r."returnDate") = ${year}
+      where status in ('APPROVE','ONGOING') and extract(month from r."returnDate")=${month} and extract(year from r."returnDate") = ${year}
       group by r."returnDate";`;
 
       const eventByDateObj = byReturnDate.reduce((acc, v) => {
@@ -146,7 +146,7 @@ export class RequestService {
     }
   }
 
-  async eventWithinMonth(month: number, year: number) {
+  async requestDaily(dateString: string) {
     try {
       const eventInMonth: EventMonth[] = await this.prisma.$queryRaw`
         select 
@@ -156,13 +156,18 @@ export class RequestService {
           r."returnDate",
           r."type",
           r.status,
+          MAX(u."name"::TEXT) "assignBy",
           array_agg(json_object(ARRAY['name', g."name", 'quantity', gh.quantity, 'unit',g.unit]::TEXT[])) goods from 
-        "Request" r join "Requester" r2 on r."idRequester" = r2.id join "GoodsHistory" gh ON gh."idRequest" = r.id join "Goods" g on g.id = gh."idGoods" where 
+        "Request" r join "Requester" r2 on r."idRequester" = r2.id 
+        join "GoodsHistory" gh ON gh."idRequest" = r.id 
+        join "Goods" g on g.id = gh."idGoods" 
+        join "Users" u on u.id = gh."assignBy"
+        where 
         (
-          (extract(month from r."takeDate") = ${month} and extract(year from r."takeDate") = ${year}) or
-          (extract(month from r."returnDate") = ${month} and extract(year from r."returnDate") = ${year})
+          r."takeDate"::date = ${dateString}::date or
+          r."returnDate"::date = ${dateString}::date
         ) and 
-        r."status" = 'APPROVE' group by
+        r."status" in ('APPROVE','ONGOING') group by
         r.id, r2.id
       `;
       return HttpReturn(eventInMonth, HttpStatus.OK);

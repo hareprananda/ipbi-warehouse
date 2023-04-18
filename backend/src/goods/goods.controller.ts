@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { GoodsService } from './goods.service';
 import { Request } from 'src/helper';
 import { HistoryService } from 'src/history/history.service';
+import { Public } from 'src/auth/auth.guard';
 // import { GoodsService } from './goods.service';
 
 @Controller('goods')
@@ -48,5 +49,12 @@ export class GoodsController {
     const userUuid = req.user.uuid;
     const data = await this.goods.updateGoods(userUuid, param.id, payload);
     res.status(data.statusCode).json(data);
+  }
+
+  @Get('/all')
+  @Public()
+  async getAll(@Res() response: Response) {
+    const data = await this.goods.getAllGoods();
+    response.status(data.statusCode).json(data);
   }
 }

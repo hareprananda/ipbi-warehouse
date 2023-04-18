@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
-import { ChangeStatusDto, DetailParam, MonthlyDto, RequestDto, RequestQuery } from './dto';
+import { ChangeStatusDto, DailyDto, DetailParam, MonthlyDto, RequestDto, RequestQuery } from './dto';
 import { RequestService } from './request.service';
 import { Public } from 'src/auth/auth.guard';
 import { Response } from 'express';
@@ -24,10 +24,9 @@ export class RequestController {
     response.status(dataEachMonth.statusCode).json(dataEachMonth);
   }
 
-  @Get('monthly-event')
-  async monthlyEvent(@Query() query: MonthlyDto, @Res() response: Response) {
-    const date = new Date(query.month);
-    const data = await this.request.eventWithinMonth(date.getMonth() + 1, date.getFullYear());
+  @Get('/event/daily')
+  async monthlyEvent(@Query() query: DailyDto, @Res() response: Response) {
+    const data = await this.request.requestDaily(query.date);
     response.status(data.statusCode).json(data);
   }
 
@@ -44,7 +43,7 @@ export class RequestController {
     response.status(data.statusCode).json(data);
   }
 
-  @Get('/:id')
+  @Get('/detail/:id')
   async getDetail(@Param() param: DetailParam, @Res() response: Response) {
     const data = await this.request.requestDetail(param.id);
     response.status(data.statusCode).json(data);

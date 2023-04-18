@@ -1,7 +1,11 @@
 const routes = {
   login: "/login",
   home: "/home",
-  request: "/request",
+  goods: "/goods",
+  request: "/req",
+  requester: "/requester",
+  manager: "/manager",
+  createRequest: "/request",
 };
 
 export default routes;

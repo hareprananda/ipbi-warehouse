@@ -13,18 +13,25 @@ interface Props {
 
 const apiCall = <T>(props: Props) => {
   return (dispatch: AppDispatch, getState: () => RootState) => {
+    const { auth } = getState();
+    let Authorization: string | undefined;
+    if (auth.accessToken) {
+      Authorization = `Bearer ${auth.accessToken}`;
+    }
+
     return axios<Response<T>>({
       baseURL: config.API,
       headers: {
         "Content-Type": "application/json",
+        Authorization,
       },
       ...props,
     })
       .then((res) => {
-        if (res.data.statusCode === 401) dispatch(action.auth.reset());
         return res.data;
       })
       .catch((err: AxiosError) => {
+        if (err.response?.status === 401) dispatch(action.auth.reset());
         return { error: true, message: [err.message], statusCode: 500, data: undefined };
       });
   };

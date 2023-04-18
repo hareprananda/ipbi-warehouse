@@ -8,7 +8,32 @@ class Api {
       url: "/goods/all",
     });
   }
+
+  eventMonth(month: string) {
+    return apiCall<Record<string, string>>({
+      method: "GET",
+      url: "/request/monthly",
+      params: {
+        month,
+      },
+    });
+  }
+
+  eventDaily(date: string) {
+    return apiCall<Model.DailyEvent>({
+      method: "GET",
+      url: "/request/event/daily",
+      params: { date },
+    });
+  }
+
+  getPending() {
+    return apiCall<Model.PendingRequest>({
+      method: "GET",
+      url: "/request/pending",
+    });
+  }
 }
 
-const goodsApi = new Api();
-export default goodsApi;
+const requestApi = new Api();
+export default requestApi;

@@ -151,4 +151,23 @@ export class GoodsService {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async getAllGoods() {
+    try {
+      const data = await this.prisma.goods.findMany({
+        orderBy: {
+          name: 'asc',
+        },
+        select: {
+          uuid: true,
+          name: true,
+          unit: true,
+        },
+      });
+
+      return HttpReturn(data, HttpStatus.OK);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

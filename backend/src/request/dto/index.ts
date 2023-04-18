@@ -42,6 +42,11 @@ export class MonthlyDto {
   month: string;
 }
 
+export class DailyDto {
+  @IsDateString()
+  date: string;
+}
+
 export type RequestPerMonth = {
   date: string;
   numberOfEvent: bigint;
@@ -122,3 +127,8 @@ export type RequesterItem = {
   lastCreated: string;
   lastReqUuid: string;
 };
+
+export class DateParam {
+  @IsDateString()
+  date: string;
+}
