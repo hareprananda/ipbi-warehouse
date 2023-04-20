@@ -1,6 +1,6 @@
 import config from "@/config";
 import axios, { AxiosError } from "axios";
-import { Response } from "./index.d";
+import { ErrorResponse, Response } from "./index.d";
 import { AppDispatch, RootState } from "@/redux/reducerprovider";
 import action from "@/redux/reduceraction";
 
@@ -32,7 +32,7 @@ const apiCall = <T>(props: Props) => {
       })
       .catch((err: AxiosError) => {
         if (err.response?.status === 401) dispatch(action.auth.reset());
-        return { error: true, message: [err.message], statusCode: 500, data: undefined };
+        return { error: true, message: [err.message], statusCode: 500, data: undefined } as ErrorResponse;
       });
   };
 };

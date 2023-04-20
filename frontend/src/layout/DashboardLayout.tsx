@@ -16,7 +16,6 @@ const DashboardLayout: React.FC = () => {
     const scriptArr: string[] = [
       "/assets/js/app.min.js",
       "/assets/js/app-style-switcher.js",
-      "/assets/js/perfect-scrollbar.jquery.min.js",
       "/assets/js/jquery.sparkline.min.js",
       "/assets/js/sidebarmenu.js",
     ];

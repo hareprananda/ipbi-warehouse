@@ -16,9 +16,10 @@ interface Props extends PropsWithChildren {
   onSubmit: (values: any) => void;
   validation?: yup.ObjectSchema<any>;
   onChange?: (values: any) => void;
+  defaultValues?: Record<string, any>;
 }
 
-const Form: React.FC<Props> = ({ onSubmit, validation, children, className, onChange }) => {
+const Form: React.FC<Props> = ({ onSubmit, validation, children, className, onChange, defaultValues }) => {
   const {
     handleSubmit,
     register,
@@ -28,6 +29,7 @@ const Form: React.FC<Props> = ({ onSubmit, validation, children, className, onCh
   } = useForm({
     mode: "onChange",
     resolver: validation && yupResolver(validation),
+    defaultValues,
   });
   const state = watch();
 

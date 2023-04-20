@@ -20,6 +20,16 @@ const useCommonStyle = makeStyles()({
     position: "sticky",
     right: 0,
   },
+
+  commonTd: {
+    "& p": {
+      fontSize: "14px",
+      margin: 0,
+    },
+    "& p:nth-of-type(2)": {
+      fontWeight: 500,
+    },
+  },
 });
 
 export default useCommonStyle;
