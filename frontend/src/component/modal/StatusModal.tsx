@@ -38,7 +38,7 @@ const StatusModal: React.FC = () => {
   }, [statusModal]);
 
   useEffect(() => {
-    $("#statusModal").on("hide.bs.modal", function (e) {
+    $("#statusModal").on("hide.bs.modal", function () {
       dispatch(action.ui.dismissStatusModal());
     });
   }, []);
@@ -65,7 +65,7 @@ const StatusModal: React.FC = () => {
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className={`modal-header border-bottom ${icons[statusModalType].bg}`}>
-              <h5 className="modal-title text-white" style={{ fontWeight: 600 }}>
+              <h5 className="modal-title text-white" style={{ fontWeight: 500 }}>
                 {icons[statusModalType].title}
               </h5>
               <button

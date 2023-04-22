@@ -9,6 +9,8 @@ const statusColor: Record<string, string> = {
   ONGOING: "bg-primary text-white",
   APPROVE: "bg-success text-white",
   PENDING: "bg-secondary text-white",
+  SUCCESS: "bg-success text-white",
+  FINISH: "bg-success text-white",
 };
 
 const StatusFlag: React.FC<Props> = ({ status }) => {

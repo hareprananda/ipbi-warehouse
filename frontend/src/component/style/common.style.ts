@@ -4,6 +4,7 @@ import { makeStyles } from "./tss-react";
 const useCommonStyle = makeStyles()({
   stickyTableContainer: {
     width: "100%",
+    height: "100%",
     overflow: "auto",
   },
 
@@ -14,11 +15,13 @@ const useCommonStyle = makeStyles()({
   },
 
   stickyTableRight: {
-    display: "flex",
-    justifyContent: "flex-end",
     backgroundColor: colors.white + "!important",
     position: "sticky",
     right: 0,
+    "& > div": {
+      display: "flex",
+      justifyContent: "flex-end",
+    },
   },
 
   commonTd: {

@@ -29,6 +29,28 @@ const UIReducer = createSlice({
       state.loading = false;
       return state;
     },
+
+    showOverlay: (state) => {
+      state.overlay = true;
+      return state;
+    },
+
+    dismissOverlay: (state) => {
+      state.overlay = false;
+      return state;
+    },
+
+    showConfirmation: (state, action: TypeActionSlice<{ message: string; onConfirm: () => void }>) => {
+      state.openConfirmation = true;
+      state.confirmationMessage = action.payload.message;
+      state.onOkConfirmation = action.payload.onConfirm;
+      return state;
+    },
+
+    dismissConfirmation: (state) => {
+      state.openConfirmation = false;
+      return state;
+    },
   },
 });
 

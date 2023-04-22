@@ -32,7 +32,12 @@ const apiCall = <T>(props: Props) => {
       })
       .catch((err: AxiosError) => {
         if (err.response?.status === 401) dispatch(action.auth.reset());
-        return { error: true, message: [err.message], statusCode: 500, data: undefined } as ErrorResponse;
+        return {
+          error: true,
+          message: ((err.response?.data as any).message as any) || [err.message],
+          statusCode: 500,
+          data: undefined,
+        } as ErrorResponse;
       });
   };
 };

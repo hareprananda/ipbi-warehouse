@@ -25,7 +25,6 @@ const Login: React.FC = () => {
       dispatch(action.ui.dismissLoading());
       if (res.data) {
         dispatch(action.auth.changeAuthForm(res.data));
-        console.log(res.data);
       } else {
         setError(res.message[0]);
       }

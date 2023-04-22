@@ -14,4 +14,21 @@ export type GoodsData = {
   stock: number;
 };
 
+export type GoodsHistory = {
+  uuid: string;
+  change: number;
+  assignby: string;
+  updatedAt: string;
+  req?: {
+    id: string;
+    requestBy: string;
+    type: string;
+    status: string;
+    takeDate: string;
+    returnDate: string;
+  };
+};
+
 export type GetGoodsRes = Pagination<GoodsData>;
+
+export type GetGoodsHistoryRes = Pagination<GoodsHistory>;
