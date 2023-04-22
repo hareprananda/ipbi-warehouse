@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res, Req, Get, Query, Param, Patch } from '@nestjs/common';
+import { Body, Controller, Post, Res, Req, Get, Query, Param, Patch, Delete } from '@nestjs/common';
 import { UUIDParam, GoodsPayload, GoodsQuery, History } from './dto';
 import { Response } from 'express';
 import { GoodsService } from './goods.service';
@@ -48,6 +48,13 @@ export class GoodsController {
   ) {
     const userUuid = req.user.uuid;
     const data = await this.goods.updateGoods(userUuid, param.id, payload);
+    res.status(data.statusCode).json(data);
+  }
+
+  @Delete('/:id')
+  async deleteGoods(@Param() param: UUIDParam, @Res() res: Response) {
+    const { id: uuid } = param;
+    const data = await this.goods.deleteGoods(uuid);
     res.status(data.statusCode).json(data);
   }
 

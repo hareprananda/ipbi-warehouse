@@ -35,7 +35,7 @@ export class HistoryService {
           "GoodsHistory" gh 
           join "Goods" g  on gh."idGoods" = g.id 
           left join "Request" r on r.id = gh."idRequest"
-        where (r.status = 'APPROVE' OR r.status isnull) and g.uuid = ${uuid}
+        where (r.status in ('FINISH', 'ONGOING') OR r.status isnull) and g.uuid = ${uuid}
       `;
       const metadata = {
         totalPage: Math.ceil(parseInt(dataTotal[0]['totalRow'] as unknown as string) / limit),
@@ -44,6 +44,7 @@ export class HistoryService {
       const data: GoodsHistory[] = await this.prisma.$queryRaw`
       select 
         gh.uuid,
+        gh."updatedAt",
         gh.quantity as "change",
         u."name" assignBy,
         case when 
@@ -64,7 +65,7 @@ export class HistoryService {
         left join "Request" r on r.id = gh."idRequest" 
         left join "Users" u on u.id = gh."assignBy" 
         left join "Requester" r2  on r."idRequester" = r2.id 
-      where (r.status = 'APPROVE' OR r.status isnull) and g.uuid = ${uuid}
+      where (r.status in ('FINISH', 'ONGOING') OR r.status isnull) and g.uuid = ${uuid}
       order by gh."createdAt" desc
       limit ${limit} offset ${(page - 1) * limit}
     `;

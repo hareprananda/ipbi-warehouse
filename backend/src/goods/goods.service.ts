@@ -113,18 +113,20 @@ export class GoodsService {
         });
         if (!newData.id) throw 'err';
         const diff = newData.stock - currentData.stock;
-        const historyData = await this.history.createHistory(
-          {
-            idGoods: newData.id,
-            quantity: diff,
-            assignBy: assignBy.data.id,
-          },
-          tx,
-        );
-        if (!historyData.data) throw 'err';
+        if (diff !== 0) {
+          const historyData = await this.history.createHistory(
+            {
+              idGoods: newData.id,
+              quantity: diff,
+              assignBy: assignBy.data.id,
+            },
+            tx,
+          );
+          if (!historyData.data) throw 'err';
+        }
         return newData;
       });
-      return HttpReturn(updatingGoods, HttpStatus.INTERNAL_SERVER_ERROR);
+      return HttpReturn(updatingGoods, HttpStatus.OK);
     } catch {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -166,6 +168,51 @@ export class GoodsService {
       });
 
       return HttpReturn(data, HttpStatus.OK);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async deleteGoods(uuid: string) {
+    try {
+      const data: { goodsId: number; historyId: number; idRequest: number }[] = await this.prisma.$queryRaw`
+        select g.id as "goodsId", gh.id as "historyId"  from "Goods" g 
+        join "GoodsHistory" gh on g.id = gh."idGoods" 
+        left join "Request" r on r.id = gh."idRequest" 
+        where r.status in ('APPROVE', 'ONGOING', 'FINISH') and g.uuid = ${uuid}
+      `;
+      if (data.length > 0) return HttpReturn('You cannot delete this goods', HttpStatus.BAD_REQUEST);
+
+      const requestIDs: { id: bigint }[] = await this.prisma.$queryRaw`
+        select r.id  from "Goods" g 
+        join "GoodsHistory" gh on g.id = gh."idGoods" 
+        left join "Request" r on r.id = gh."idRequest" 
+        where r.status in ('PENDING', 'REJECT') and g.uuid = ${uuid}
+      `;
+
+      await this.prisma.$transaction(async (tx) => {
+        const goods = await tx.goods.delete({
+          where: {
+            uuid,
+          },
+          select: {
+            name: true,
+          },
+        });
+
+        await tx.request.deleteMany({
+          where: {
+            id: {
+              in: requestIDs.reduce((acc, v) => {
+                if (v) acc.push(v.id);
+                return acc;
+              }, []),
+            },
+          },
+        });
+        return goods;
+      });
+      return HttpReturn(`Delete Success`, HttpStatus.OK);
     } catch {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
