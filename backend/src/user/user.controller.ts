@@ -29,4 +29,10 @@ export class UserController {
     const data = await this.userService.getUser({ limit: parseInt(limit || '20'), page: parseInt(page || '1') });
     response.status(data.statusCode).json(data);
   }
+
+  @Get('/all-manager')
+  async getManager(@Res() response: Response) {
+    const data = await this.userService.getAllManager();
+    response.status(data.statusCode).json(data);
+  }
 }

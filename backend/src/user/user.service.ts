@@ -123,4 +123,22 @@ export class UserService {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async getAllManager() {
+    try {
+      const data = await this.prisma.users.findMany({
+        orderBy: {
+          name: 'asc',
+        },
+        select: {
+          name: true,
+          uuid: true,
+        },
+      });
+
+      return HttpReturn(data, HttpStatus.OK);
+    } catch {
+      return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

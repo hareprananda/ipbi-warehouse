@@ -210,7 +210,7 @@ export class RequestService {
     let filterString = filterArr.join(` and `);
     if (filterArr.length > 0) filterString = `where ${filterString}`;
     try {
-      const metaData = await this.common.generatePageMetadata(
+      const metadata = await this.common.generatePageMetadata(
         this.prisma.$queryRawUnsafe(`
         select count(*) as "totalRow"  from 
         "Request" r join "Requester" r2 on r."idRequester" = r2.id join "GoodsHistory" gh on gh."idRequest" = r.id left join "Users" u on u.id = gh."assignBy"
@@ -229,7 +229,7 @@ export class RequestService {
       order by r."createdAt" desc
       limit ${limit} offset ${(page - 1) * limit}
     `);
-      return HttpReturn({ data, metaData }, HttpStatus.OK);
+      return HttpReturn({ data, metadata }, HttpStatus.OK);
     } catch {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -346,7 +346,7 @@ export class RequestService {
           }
         }
       });
-      return HttpReturn(updating, HttpStatus.OK);
+      return HttpReturn('Success', HttpStatus.OK);
     } catch (err) {
       return HttpReturn(
         typeof err === 'string' ? err : 'Something wrong',
