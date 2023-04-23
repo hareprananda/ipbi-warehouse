@@ -5,6 +5,7 @@ const useStyle = makeStyles()({
     width: "500px",
     overflow: "hidden",
     transition: "width .5s",
+    flexShrink: 0,
     "@media (max-width: 992px)": {
       width: "100%",
     },

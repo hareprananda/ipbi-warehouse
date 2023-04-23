@@ -3,7 +3,7 @@ import { FormContex } from "../Form";
 
 interface Props extends HTMLProps<HTMLSelectElement> {
   field: string;
-  placeholder: string;
+  placeholder?: string;
   options: { value: string; label: string }[];
   parentProps?: HTMLProps<HTMLDivElement>;
 }

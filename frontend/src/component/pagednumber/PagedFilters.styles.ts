@@ -14,7 +14,15 @@ const useStyle = makeStyles()({
     WebkitBoxShadow: "0px 0px 13px 1px rgba(0,0,0,0.2)",
     MozBoxShadow: "0px 0px 13px 1px rgba(0,0,0,0.2)",
     transform: "translate(0, 100%)",
-    minWidth: "400px",
+    width: "400px",
+    "&  p": {
+      fontSize: "14px",
+    },
+
+    "@media (max-width: 420px)": {
+      width: "100vw",
+      left: "-15px",
+    },
   },
 
   popoverActive: {
@@ -33,6 +41,7 @@ const useStyle = makeStyles()({
   appliedFilterContainer: {
     backgroundColor: "rgba(0, 0,0,0.12)",
     display: "flex",
+    gap: "5px",
     flexWrap: "nowrap",
     overflow: "auto",
   },
@@ -40,6 +49,7 @@ const useStyle = makeStyles()({
   chips: {
     display: "flex",
     alignItems: "center",
+    flexShrink: 0,
     border: `1px solid ${colors.primary}`,
     borderRadius: "12px",
     gap: "5px",

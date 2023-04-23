@@ -17,7 +17,7 @@ class LayoutHelper {
       {
         name: "Request",
         icon: faEnvelope,
-        path: routes.request,
+        path: routes.manageRequest,
       },
       {
         name: "Peminta",

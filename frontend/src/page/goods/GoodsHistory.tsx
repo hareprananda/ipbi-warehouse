@@ -111,8 +111,8 @@ const GoodsHistory: React.FC<Props> = ({ activeGoods, onRemoveActive }) => {
               History {activeGoods.name}
             </h4>
           </div>
-          <div style={{ width: "100%", position: "relative", height: "calc(100% - 53.47px)" }}>
-            <div style={{ width: "100%", position: "absolute", overflow: "auto", padding: "0 10px", height: "100%" }}>
+          <div className="d-flex" style={{ minHeight: "calc(100% - 53.47px)", width: "100%" }}>
+            <div style={{ overflow: "auto", width: "100%", padding: " 0px 10px" }}>
               <PagedNumber
                 ref={goodsHistoryRef}
                 urlTrack={false}
@@ -121,7 +121,7 @@ const GoodsHistory: React.FC<Props> = ({ activeGoods, onRemoveActive }) => {
                 fetchInitial={false}
               >
                 {({ renderItem }) => (
-                  <div className={`${commonClass.stickyTableContainer}`}>
+                  <div>
                     <table className={`table mt-2 `}>
                       <tbody>{renderItem()}</tbody>
                     </table>

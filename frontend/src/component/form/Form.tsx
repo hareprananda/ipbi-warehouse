@@ -7,6 +7,7 @@ export type ContextValue = {
   errors: FormState<FieldValues>["errors"];
   register: UseFormRegister<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
+  state: Record<string, any>;
 };
 
 export const FormContex = createContext({} as ContextValue);
@@ -39,7 +40,7 @@ const Form: React.FC<Props> = ({ onSubmit, validation, children, className, onCh
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={className}>
-      <FormContex.Provider value={{ errors: errors, register, setValue }}>{children}</FormContex.Provider>
+      <FormContex.Provider value={{ errors: errors, register, setValue, state }}>{children}</FormContex.Provider>
     </form>
   );
 };

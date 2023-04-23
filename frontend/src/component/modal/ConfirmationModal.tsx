@@ -48,6 +48,7 @@ const ConfirmationModal: React.FC = () => {
       <div
         className="modal fade"
         id="confirmModal"
+        style={{ zIndex: 1000000 }}
         tabIndex={-1}
         role="dialog"
         aria-labelledby="exampleModalLabel"

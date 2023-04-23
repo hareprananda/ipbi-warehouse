@@ -207,7 +207,7 @@ const PagedNumber = forwardRef<PagedNumberRef, Props>(
 
     return (
       <PagedNumberCtx.Provider value={contextValue}>
-        <div className="d-flex flex-column justify-content-between" style={{ height: "100%" }}>
+        <div className="d-flex flex-column justify-content-between" style={{ minHeight: "100%" }}>
           <div style={{ height: "100%" }}>{children({ renderItem })}</div>
           <div className="d-flex justify-content-center" style={{ flexShrink: 0 }}>
             <Pagination currentPage={metadata.currentPage} maxpage={metadata.totalPage} onClickPage={onPageClick} />

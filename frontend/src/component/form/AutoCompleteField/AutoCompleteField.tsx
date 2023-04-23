@@ -15,7 +15,7 @@ const AutoCompleteField: React.FC<Props> = (props) => {
   const inputParentRef = useRef<HTMLDivElement>(null);
   const { classes } = useStyle();
 
-  const { register, errors, setValue } = useContext(FormContex);
+  const { register, errors, setValue, state } = useContext(FormContex);
 
   const { field, options, parentProps, ...inputProps } = props;
 
@@ -36,6 +36,13 @@ const AutoCompleteField: React.FC<Props> = (props) => {
   }, [options, changeVal]);
 
   const { onChange: _, ...registerProps } = register(field);
+
+  useEffect(() => {
+    if (state[props.field]) {
+      const inputEl = inputParentRef.current?.querySelector("input") as HTMLInputElement;
+      inputEl.value = options.find((v) => v.value === state[props.field])?.label as string;
+    }
+  }, []);
 
   return (
     <div {...parentProps} className={`${parentProps?.className || ""} ${classes.autocomplete}`} ref={inputParentRef}>

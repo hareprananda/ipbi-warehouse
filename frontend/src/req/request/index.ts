@@ -1,4 +1,5 @@
 import apiCall from "..";
+import { Pagination } from "../globalType";
 import * as Model from "./request.model";
 
 class Api {
@@ -31,6 +32,31 @@ class Api {
     return apiCall<Model.PendingRequest>({
       method: "GET",
       url: "/request/pending",
+    });
+  }
+
+  getRequest(params: Model.RequestFilter) {
+    return apiCall<Pagination<Model.RequestData>>({
+      method: "GET",
+      url: "/request",
+      params,
+    });
+  }
+
+  requestDetail(id: string) {
+    return apiCall<Model.RequestDetail>({
+      method: "GET",
+      url: `/request/detail/${id}`,
+    });
+  }
+
+  changeStatus(id: string, status: Model.RequestStatus) {
+    return apiCall({
+      method: "PATCH",
+      url: `/request/${id}`,
+      data: {
+        status,
+      },
     });
   }
 }

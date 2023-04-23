@@ -7,7 +7,8 @@ interface Props {
 
 const statusColor: Record<string, string> = {
   ONGOING: "bg-primary text-white",
-  APPROVE: "bg-success text-white",
+  APPROVE: "bg-info text-white",
+  REJECT: "bg-danger text-white",
   PENDING: "bg-secondary text-white",
   SUCCESS: "bg-success text-white",
   FINISH: "bg-success text-white",

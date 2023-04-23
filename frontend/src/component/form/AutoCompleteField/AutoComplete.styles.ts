@@ -4,6 +4,7 @@ const useStyle = makeStyles()({
   autocomplete: {
     position: "relative",
     display: "inline-block",
+    width: "100%",
     "& .autocomplete-items": {
       position: "absolute",
       border: "1px solid #d4d4d4",

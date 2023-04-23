@@ -5,7 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFilter, faTimes } from "@fortawesome/free-solid-svg-icons";
 import useStyle from "./PagedFilters.styles";
 
-const PagedFilters: React.FC<PropsWithChildren> = ({ children }) => {
+interface Props extends PropsWithChildren {
+  filterLabel?: (labelObj: Record<string, string>) => Record<string, string>;
+}
+
+const PagedFilters: React.FC<Props> = ({ children, filterLabel }) => {
   const PNContext = useContext(PagedNumberCtx);
   const [openPopover, setOpenPopover] = useState(false);
   const [hideEl, setHideEl] = useState(true);
@@ -64,11 +68,12 @@ const PagedFilters: React.FC<PropsWithChildren> = ({ children }) => {
 
   const renderChips = () => {
     const contentArr = [] as JSX.Element[];
-    for (const key in appliedFilter) {
+    const filterLabelObj = filterLabel ? filterLabel({ ...appliedFilter }) : appliedFilter;
+    for (const key in filterLabelObj) {
       contentArr.push(
         <div key={key} className={classes.chips}>
           <p className="m-0">
-            {key} : {appliedFilter[key]}
+            {key} : {filterLabelObj[key]}
           </p>
           <FontAwesomeIcon icon={faTimes} role="button" onClick={() => removeFilter(key)} />
         </div>
