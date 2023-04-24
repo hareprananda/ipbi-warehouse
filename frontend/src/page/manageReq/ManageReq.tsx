@@ -101,10 +101,16 @@ const ManageReq: React.FC = () => {
                       <PagedFilters filterLabel={customFilterLabel}>
                         <div className="row align-items-center">
                           <div className="col-4">
-                            <p className="m-0">Nama :</p>
+                            <p className="m-0">Peminta :</p>
                           </div>
                           <div className="col-8">
-                            <TextField field="name" className="form-control" placeholder="Nama..." />
+                            <TextField field="requestBy" className="form-control" placeholder="Nama..." />
+                          </div>
+                          <div className="col-4">
+                            <p className="m-0">Id Peminta :</p>
+                          </div>
+                          <div className="col-8">
+                            <TextField field="requestById" className="form-control" />
                           </div>
                           <div className="col-4">
                             <p className="m-0">Tanggal Ambil :</p>

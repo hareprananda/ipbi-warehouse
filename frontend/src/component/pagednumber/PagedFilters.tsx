@@ -18,8 +18,7 @@ const PagedFilters: React.FC<Props> = ({ children, filterLabel }) => {
 
   const [appliedFilter, setAppliedFilter] = useState<Record<string, any>>({});
 
-  useEffect(() => {
-    if (PNContext.popStateTrigger === 1) return;
+  const setFilterFromUrl = () => {
     const filterParamsKey = PNContext.queryParamsPrefix ? `${PNContext.queryParamsPrefix}_filter` : "filter";
     const queryParamsIns = new URLSearchParams(window.location.search);
     const filterString = queryParamsIns.get(filterParamsKey) as string;
@@ -34,7 +33,16 @@ const PagedFilters: React.FC<Props> = ({ children, filterLabel }) => {
         }, {} as Record<string, any>);
     }
     setAppliedFilter(filterObj);
+  };
+
+  useEffect(() => {
+    if (PNContext.popStateTrigger === 1) return;
+    setFilterFromUrl();
   }, [PNContext.popStateTrigger]);
+
+  useEffect(() => {
+    if (PNContext.urlTrack) setFilterFromUrl();
+  }, []);
 
   useEffect(() => {
     if (openPopover) return setHideEl(false);
