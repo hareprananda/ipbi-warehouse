@@ -83,6 +83,10 @@ export class RequestQuery {
   @IsOptional()
   requestBy?: string;
 
+  @IsUUID()
+  @IsOptional()
+  requestById?: string;
+
   @IsEnum(RequestStatus)
   @IsOptional()
   status?: Request['status'];

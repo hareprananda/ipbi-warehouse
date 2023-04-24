@@ -195,7 +195,8 @@ export class RequestService {
     const filter: Record<FilterKey, (q: string) => string> = {
       takeDate: (takeDate: string) => `r."takeDate" = '${takeDate}'`,
       returnDate: (returnDate: string) => `r."returnDate" = '${returnDate}'`,
-      assignBy: (uuid: string) => `u.uuid = '${uuid}'`,
+      assignBy: (uuid: string) => `u.uuid = '${uuid.replace(/['"]/g, '')}'`,
+      requestById: (uuid: string) => `r2.uuid = '${uuid}'`,
       requestBy: (name: string) => `LOWER(r2."name") like ${"'%" + name.replace(/['"]/g, '').toLowerCase() + "%'"}`,
       status: (status: string) => `r."status" = '${status}'`,
     };

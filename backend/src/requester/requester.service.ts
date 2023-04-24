@@ -57,7 +57,7 @@ export class RequesterService {
     const filterString = filterArr.length > 0 ? `where ${filterArr.join(' and ')}` : ``;
 
     try {
-      const metaData = await this.common.generatePageMetadata(
+      const metadata = await this.common.generatePageMetadata(
         this.prisma.$queryRawUnsafe(`
         select count(*) as "totalRow"  from "Requester" r 
         join (select r2."idRequester", max(r2."createdAt"::TIMESTAMP) "last"  from "Request" r2 group by r2."idRequester") latest on latest."idRequester" = r.id 
@@ -74,7 +74,7 @@ export class RequesterService {
         ${filterString}
         limit ${limit} offset ${(page - 1) * limit}
       `);
-      return HttpReturn({ data, metaData }, HttpStatus.OK);
+      return HttpReturn({ data, metadata }, HttpStatus.OK);
     } catch {
       return HttpReturn('Something wrong', HttpStatus.INTERNAL_SERVER_ERROR);
     }
