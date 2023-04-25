@@ -8,6 +8,14 @@ class Api {
       url: "/user/all-manager",
     });
   }
+
+  updateProfile(data: Record<string, string>) {
+    return apiCall<Model.UpdateResponse>({
+      method: "PATCH",
+      url: `/profile`,
+      data,
+    });
+  }
 }
 
 const userApi = new Api();

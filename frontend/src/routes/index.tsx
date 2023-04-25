@@ -6,6 +6,7 @@ import ManageReq from "@/page/manageReq/ManageReq";
 import Manager from "@/page/manager/Manager";
 import Request from "@/page/request/Request";
 import Requester from "@/page/requester/Requester";
+import Setting from "@/page/setting/Setting";
 import React from "react";
 import { Route } from "react-router-dom";
 
@@ -26,6 +27,7 @@ export const Protected = () => {
       <Route path={routes.manageRequest} element={<ManageReq />} />
       <Route path={routes.requester} element={<Requester />} />
       <Route path={routes.manager} element={<Manager />} />
+      <Route path={routes.setting} element={<Setting />} />
     </>
   );
 };

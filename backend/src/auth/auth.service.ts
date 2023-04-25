@@ -22,6 +22,7 @@ export class AuthService {
       uuid: user.uuid,
       phoneNumber: user.phone,
       level: user.level,
+      createdAt: user.createdAt,
     };
     returnedData['accessToken'] = await this.jwt.signAsync(returnedData);
     return HttpReturn(returnedData, 200);

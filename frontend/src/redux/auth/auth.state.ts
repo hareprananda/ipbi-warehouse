@@ -2,6 +2,7 @@ const AccountState = {
   name: "",
   uuid: "",
   phoneNumber: "",
+  createdAt: "",
   level: "",
   accessToken: "",
 };

@@ -5,6 +5,7 @@ const routes = {
   request: "/req",
   requester: "/requester",
   manager: "/manager",
+  setting: "/setting",
   manageRequest: "/request",
 };
 

@@ -3,5 +3,6 @@ export type LoginResponse = {
   uuid: string;
   phoneNumber: string;
   level: string;
+  createdAt: string;
   accessToken: string;
 };

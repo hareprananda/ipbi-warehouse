@@ -2,10 +2,6 @@ import { UserLevel } from '@prisma/client';
 import { IsEnum, IsOptional, IsNotEmpty, ValidateIf, IsString, IsNumberString } from 'class-validator';
 
 export class ChangeProfilePayload {
-  @IsEnum(UserLevel)
-  @IsOptional()
-  level?: UserLevel;
-
   @ValidateIf((o) => !!o.currentPassword)
   @IsNotEmpty()
   password?: string;
