@@ -3,6 +3,7 @@ import Login from "@/page/auth/Login";
 import Goods from "@/page/goods/Goods";
 import Home from "@/page/home/Home";
 import ManageReq from "@/page/manageReq/ManageReq";
+import Manager from "@/page/manager/Manager";
 import Request from "@/page/request/Request";
 import Requester from "@/page/requester/Requester";
 import React from "react";
@@ -24,6 +25,7 @@ export const Protected = () => {
       <Route path={routes.goods} element={<Goods />} />
       <Route path={routes.manageRequest} element={<ManageReq />} />
       <Route path={routes.requester} element={<Requester />} />
+      <Route path={routes.manager} element={<Manager />} />
     </>
   );
 };

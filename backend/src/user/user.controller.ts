@@ -1,6 +1,6 @@
-import { Body, Controller, Post, Patch, Param, Res, Get } from '@nestjs/common';
+import { Body, Controller, Post, Patch, Param, Res, Get, Delete } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AddPayload, UserQuery } from './dto';
+import { AddPayload, ChangeLevel, DetailParam, UserQuery } from './dto';
 import { Admin } from 'src/auth/auth.guard';
 import { Response } from 'express';
 import { Query } from '@nestjs/common/decorators';
@@ -33,6 +33,27 @@ export class UserController {
   @Get('/all-manager')
   async getManager(@Res() response: Response) {
     const data = await this.userService.getAllManager();
+    response.status(data.statusCode).json(data);
+  }
+
+  @Patch('/:id/level')
+  async changeLevel(@Param() param: DetailParam, @Body() body: ChangeLevel, @Res() response: Response) {
+    const { id } = param;
+    const res = await this.userService.changeLevel(id, body.level);
+    response.status(res.statusCode).json(res);
+  }
+
+  @Post('/:id/reset')
+  async resetPassword(@Param() param: DetailParam, @Res() response: Response) {
+    const { id } = param;
+    const data = await this.userService.resetPassword(id);
+    response.status(data.statusCode).json(data);
+  }
+
+  @Delete('/:id')
+  async deleteUser(@Param() param: DetailParam, @Res() response: Response) {
+    const { id } = param;
+    const data = await this.userService.deleteManager(id);
     response.status(data.statusCode).json(data);
   }
 }

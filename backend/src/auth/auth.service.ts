@@ -27,13 +27,7 @@ export class AuthService {
     return HttpReturn(returnedData, 200);
   }
 
-  async test() {
-    return await this.prisma.users.findFirst({
-      where: {
-        NOT: {
-          name: 'qqqq',
-        },
-      },
-    });
+  async resetPassword(id) {
+    return HttpReturn('berhasil', HttpStatus.OK);
   }
 }

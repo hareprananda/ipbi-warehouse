@@ -1,5 +1,5 @@
 import { UserLevel } from '@prisma/client';
-import { IsNumberString, IsOptional } from 'class-validator';
+import { IsEnum, IsNumberString, IsOptional, IsUUID } from 'class-validator';
 
 export type AddPayload = {
   name: string;
@@ -30,4 +30,14 @@ export interface ChangeUserData {
   currentPassword?: string;
   name?: string;
   phone?: string;
+}
+
+export class DetailParam {
+  @IsUUID()
+  id: string;
+}
+
+export class ChangeLevel {
+  @IsEnum(UserLevel)
+  level: UserLevel;
 }
