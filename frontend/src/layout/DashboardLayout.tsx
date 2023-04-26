@@ -1,16 +1,21 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import action from "@/redux/reduceraction";
-import { faArrowLeft, faBell, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBars, faBell, faCog, faEllipsisVertical, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
 import layoutHelper from "./layoutHelper";
+import routes from "@/const/routes";
+import colors from "@/const/colors";
+import useStyle from "./DashboardLayout.styles";
 
 const DashboardLayout: React.FC = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const settingButtonRef = useRef<HTMLAnchorElement>(null);
   const { name, phoneNumber, level } = useAppSelector((state) => state.auth);
+  const { classes } = useStyle();
 
   useEffect(() => {
     const scriptArr: string[] = [
@@ -41,7 +46,7 @@ const DashboardLayout: React.FC = () => {
           <nav className="navbar top-navbar navbar-expand-md navbar-dark">
             <div className="navbar-header">
               <a className="nav-toggler waves-effect waves-light d-block d-md-none">
-                <i className="ti-menu ti-close"></i>
+                <FontAwesomeIcon icon={faBars} />
               </a>
 
               <a
@@ -60,166 +65,87 @@ const DashboardLayout: React.FC = () => {
               </a>
 
               <a
-                className="topbartoggler d-block d-md-none waves-effect waves-light"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
+                className="topbartoggler d-block d-md-none nav-link dropdown-toggle waves-effect waves-dark"
+                // data-bs-toggle="collapse"
+                // data-bs-target="#navbarSupportedContent"
+                // aria-controls="navbarSupportedContent"
+                onClick={() => {
+                  // setTimeout(() => {
+                  //   settingButtonRef.current?.click();
+                  // }, 100);
+                  // setTimeout(() => {
+                  //   settingButtonRef.current?.click();
+                  // }, 200);
+                }}
                 aria-label="Toggle navigation"
               >
-                <i className="ti-more"></i>
+                <FontAwesomeIcon icon={faCog} />
               </a>
             </div>
 
-            <div className="navbar-collapse collapse" id="navbarSupportedContent">
+            <div className="navbar-collapse collapse show" id="navbarSupportedContent">
               <ul className="navbar-nav me-auto">
                 <li className="nav-item d-none d-md-block">
                   <a className="nav-link sidebartoggler waves-effect waves-light" data-sidebartype="mini-sidebar">
                     <FontAwesomeIcon icon={faArrowLeft} className="feather-sm navicon" />
                   </a>
                 </li>
-
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle waves-effect waves-dark"
-                    href="#"
-                    data-bs-toggle="dropdown"
-                    aria-haspopup="true"
-                  >
-                    <FontAwesomeIcon icon={faBell} className="feather-sm navicon" />
-                    <div className="notify">
-                      <span className="heartbit"></span> <span className="point"></span>
-                    </div>
-                  </a>
-                  <div className="dropdown-menu dropdown-menu-start mailbox dropdown-menu-animate-up">
-                    <ul className="list-style-none">
-                      <li>
-                        <div className="border-bottom rounded-top py-3 px-4">
-                          <div className="mb-0 font-weight-medium fs-4">Notifications</div>
-                        </div>
-                      </li>
-                      <li>
-                        <div className="message-center notifications position-relative" style={{ height: "230px" }}>
-                          <a className="message-item d-flex align-items-center border-bottom px-3 py-2">
-                            <span className="btn btn-light-danger text-danger btn-circle">
-                              <i data-feather="link" className="feather-sm fill-white"></i>
-                            </span>
-                            <div className="w-75 d-inline-block v-middle ps-3">
-                              <h5 className="message-title mb-0 mt-1 fs-3 fw-bold">Luanch Admin</h5>
-                              <span className="fs-2 text-nowrap d-block time text-truncate fw-normal text-muted mt-1">
-                                Just see the my new admin!
-                              </span>
-                              <span className="fs-2 text-nowrap d-block subtext text-muted">9:30 AM</span>
-                            </div>
-                          </a>
-
-                          <a className="message-item d-flex align-items-center border-bottom px-3 py-2">
-                            <span className="btn btn-light-success text-success btn-circle">
-                              <i data-feather="calendar" className="feather-sm fill-white"></i>
-                            </span>
-                            <div className="w-75 d-inline-block v-middle ps-3">
-                              <h5 className="message-title mb-0 mt-1 fs-3 fw-bold">Event today</h5>
-                              <span className="fs-2 text-nowrap d-block time text-truncate fw-normal text-muted mt-1">
-                                Just a reminder that you have event
-                              </span>
-                              <span className="fs-2 text-nowrap d-block subtext text-muted">9:10 AM</span>
-                            </div>
-                          </a>
-
-                          <a className="message-item d-flex align-items-center border-bottom px-3 py-2">
-                            <span className="btn btn-light-info text-info btn-circle">
-                              <i data-feather="settings" className="feather-sm fill-white"></i>
-                            </span>
-                            <div className="w-75 d-inline-block v-middle ps-3">
-                              <h5 className="message-title mb-0 mt-1 fs-3 fw-bold">Settings</h5>
-                              <span className="fs-2 text-nowrap d-block time text-truncate fw-normal text-muted mt-1">
-                                You can customize this template as you want
-                              </span>
-                              <span className="fs-2 text-nowrap d-block subtext text-muted">9:08 AM</span>
-                            </div>
-                          </a>
-
-                          <a className="message-item d-flex align-items-center border-bottom px-3 py-2">
-                            <span className="btn btn-light-primary text-primary btn-circle">
-                              <i data-feather="users" className="feather-sm fill-white"></i>
-                            </span>
-                            <div className="w-75 d-inline-block v-middle ps-3">
-                              <h5 className="message-title mb-0 mt-1 fs-3 fw-bold">Pavan kumar</h5>
-                              <span className="fs-2 text-nowrap d-block time text-truncate fw-normal text-muted mt-1">
-                                Just see the my admin!
-                              </span>
-                              <span className="fs-2 text-nowrap d-block subtext text-muted">9:02 AM</span>
-                            </div>
-                          </a>
-                        </div>
-                      </li>
-                      <li>
-                        <a className="nav-link border-top text-center text-dark pt-3">
-                          <strong>Check all notifications</strong>
-                          <i className="fa fa-angle-right"></i>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
               </ul>
 
               <ul className="navbar-nav">
-                <li className="nav-item dropdown">
+                <li className={`nav-item dropdown ${classes.navDropdown}`}>
                   <a
-                    className="nav-link dropdown-toggle waves-effect waves-dark"
+                    className={`nav-link dropdown-toggle waves-effect waves-dark ${classes.dropdown}`}
+                    ref={settingButtonRef}
                     href="#"
                     data-bs-toggle="dropdown"
                     aria-haspopup="true"
                   >
-                    <img
+                    <div className={`profile-pic rounded-circle ${classes.profilePic}`}>
+                      <p
+                        className="m-0"
+                        style={{ lineHeight: "12px", fontWeight: 500, fontSize: "12px", color: colors.cyan }}
+                      >
+                        {name.slice(0, 1).toUpperCase()}
+                      </p>
+                    </div>
+                    {/* <img
                       src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/monster-bootstrap/package/assets/images/users/5.jpg"
                       alt="user"
                       width="30"
                       className="profile-pic rounded-circle"
-                    />
+                    /> */}
                   </a>
-                  <div className="dropdown-menu dropdown-menu-end user-dd animated flipInY">
+                  <div className={`dropdown-menu dropdown-menu-end user-dd animated ${classes.settingDropdown}`}>
                     <div className="d-flex no-block align-items-center p-3 bg-info text-white mb-2">
                       <div className="">
-                        <img
-                          src="https://demos.wrappixel.com/premium-admin-templates/bootstrap/monster-bootstrap/package/assets/images/users/5.jpg"
-                          alt="user"
+                        <div
                           className="rounded-circle"
-                          width="60"
-                        />
+                          style={{
+                            backgroundColor: colors["gray-100"],
+                            height: 60,
+                            width: 60,
+                            display: "grid",
+                            placeItems: "center",
+                          }}
+                        >
+                          <p className="m-0" style={{ fontWeight: 500, fontSize: "23px", color: colors.cyan }}>
+                            {name.slice(0, 1).toUpperCase()}
+                          </p>
+                        </div>
                       </div>
                       <div className="ms-2">
                         <h4 className="mb-0 text-white">{name}</h4>
                         <p className="mb-0">{phoneNumber}</p>
                       </div>
                     </div>
-                    <a className="dropdown-item" href="#">
-                      <i data-feather="user" className="feather-sm text-info me-1 ms-1"></i>
-                      My Profile
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <i data-feather="credit-card" className="feather-sm text-info me-1 ms-1"></i>
-                      My Balance
-                    </a>
-                    <a className="dropdown-item" href="#">
-                      <i data-feather="mail" className="feather-sm text-success me-1 ms-1"></i>
-                      Inbox
-                    </a>
-                    <div className="dropdown-divider"></div>
-                    <a className="dropdown-item" href="#">
+                    <Link className="dropdown-item" to={routes.setting}>
                       <i data-feather="settings" className="feather-sm text-warning me-1 ms-1"></i>
                       Account Setting
-                    </a>
-                    <div className="dropdown-divider"></div>
+                    </Link>
                     <div className="dropdown-item" onClick={() => dispatch(action.auth.reset())}>
                       <i data-feather="log-out" className="feather-sm text-danger me-1 ms-1"></i>
                       Logout
-                    </div>
-                    <div className="dropdown-divider"></div>
-                    <div className="pl-4 p-2">
-                      <a href="#" className="btn d-block w-100 btn-info rounded-pill">
-                        View Profile
-                      </a>
                     </div>
                   </div>
                 </li>
