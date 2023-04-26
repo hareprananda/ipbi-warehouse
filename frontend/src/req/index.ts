@@ -7,7 +7,7 @@ import action from "@/redux/reduceraction";
 interface Props {
   url: string;
   method: "PUT" | "POST" | "PATCH" | "GET" | "DELETE";
-  data?: Record<string, number | string>;
+  data?: Record<string, any>;
   params?: Record<string, number | string>;
 }
 

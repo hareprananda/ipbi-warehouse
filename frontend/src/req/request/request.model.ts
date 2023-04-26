@@ -66,3 +66,12 @@ export type RequestDetail = {
     quantity: string;
   }[];
 };
+
+export type RequestPayload = {
+  goods: { id: string; amount: number }[];
+  phoneNumber: string;
+  name: string;
+  requestType: string;
+  pickUpDate: string;
+  returnDate?: string;
+};

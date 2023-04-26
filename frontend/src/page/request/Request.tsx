@@ -10,6 +10,10 @@ import { useAppDispatch } from "@/hooks/useRedux";
 import goodsApi from "@/req/request";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import requestApi from "@/req/request";
+import action from "@/redux/reduceraction";
+import { useNavigate } from "react-router-dom";
+import routes from "@/const/routes";
 
 const Request: React.FC = () => {
   const { classes } = useStyle();
@@ -18,13 +22,39 @@ const Request: React.FC = () => {
   const [goodsOption, setGoodsOption] = useState<{ value: string; label: string }[]>([]);
   const dispatch = useAppDispatch();
   const [goodsNumber, setGoodsNumber] = useState(1);
+  const navigate = useNavigate();
 
-  const submitVal = (values: any) => {
-    console.log();
+  const submitVal = (values: Record<string, string>) => {
+    const { name, phoneNumber, pickUpDate, requestType, returnDate, ...restGoods } = values;
+    const goodsObj: Record<string, number> = {};
+    for (const goodsKey in restGoods) {
+      const amount = parseInt(restGoods[`${goodsKey}-amount`] || "0");
+      if (!amount) continue;
+      goodsObj[restGoods[goodsKey]] = amount;
+    }
+    const goodsArr: { id: string; amount: number }[] = [];
+    for (const id in goodsObj) goodsArr.push({ id, amount: goodsObj[id] });
+    dispatch(action.ui.showLoading());
+    dispatch(
+      requestApi.createRequest({
+        name,
+        phoneNumber,
+        pickUpDate,
+        requestType,
+        goods: goodsArr,
+        returnDate,
+      })
+    ).then((res) => {
+      dispatch(action.ui.dismissLoading());
+      if (res.data) {
+        navigate(routes.requestSuccess, {
+          state: res.data,
+        });
+      } else dispatch(action.ui.showStatusModal({ type: "error", message: res.message[0] }));
+    });
   };
 
   const onChangeVal = (values: any) => {
-    console.log(values);
     setIsBorrow(values.requestType === "BORROW");
     setPickUpDate(values.pickUpDate);
   };
@@ -122,12 +152,17 @@ const Request: React.FC = () => {
                         parentProps={{
                           className: "input-group mb-3",
                         }}
-                        field="goods"
+                        field={`${idx}goods`}
                         options={goodsOption}
                       />
                     </div>
                     <div className="col-6">
-                      <TextField field="amount" className="form-control" type="number" placeholder="Jumlah..." />
+                      <TextField
+                        field={`${idx}goods-amount`}
+                        className="form-control"
+                        type="number"
+                        placeholder="Jumlah..."
+                      />
                     </div>
                   </div>
                   <div role="button" style={{ transform: "translate(0, -13px)" }}>
@@ -162,6 +197,11 @@ const Request: React.FC = () => {
             </div>
           </div>
         )}
+        <div className="d-flex justify-content-end mt-3">
+          <button className="btn btn-info" type="submit">
+            Submit
+          </button>
+        </div>
       </Form>
     </div>
   );

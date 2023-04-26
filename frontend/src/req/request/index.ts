@@ -59,6 +59,14 @@ class Api {
       },
     });
   }
+
+  createRequest(data: Model.RequestPayload) {
+    return apiCall({
+      method: "POST",
+      url: `/request`,
+      data,
+    });
+  }
 }
 
 const requestApi = new Api();

@@ -16,6 +16,13 @@ class Api {
       data,
     });
   }
+
+  adminContact() {
+    return apiCall<{ phone: string }>({
+      method: "GET",
+      url: `/contact`,
+    });
+  }
 }
 
 const userApi = new Api();

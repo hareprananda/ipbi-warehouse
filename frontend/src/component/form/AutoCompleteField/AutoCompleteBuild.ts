@@ -135,12 +135,12 @@ export function autoCompleteAdd(
     if (currentFocus >= x.length) currentFocus = 0;
     if (currentFocus < 0) currentFocus = x.length - 1;
     /*add class "autocomplete-active":*/
-    x[currentFocus].classList.add("autocomplete-active");
+    x[currentFocus]?.classList.add("autocomplete-active");
   }
   function removeActive(x: any) {
     /*a function to remove the "active" class from all autocomplete items:*/
     for (let i = 0; i < x.length; i++) {
-      x[i].classList.remove("autocomplete-active");
+      x[i]?.classList.remove("autocomplete-active");
     }
   }
   function closeAllLists(elmnt?: HTMLInputElement) {
@@ -294,12 +294,12 @@ export function autoCompleteRemove(
     if (currentFocus >= x.length) currentFocus = 0;
     if (currentFocus < 0) currentFocus = x.length - 1;
     /*add class "autocomplete-active":*/
-    x[currentFocus].classList.add("autocomplete-active");
+    x[currentFocus]?.classList.add("autocomplete-active");
   }
   function removeActive(x: any) {
     /*a function to remove the "active" class from all autocomplete items:*/
     for (let i = 0; i < x.length; i++) {
-      x[i].classList.remove("autocomplete-active");
+      x[i]?.classList.remove("autocomplete-active");
     }
   }
   function closeAllLists(elmnt?: HTMLInputElement) {

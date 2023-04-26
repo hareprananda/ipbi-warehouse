@@ -5,7 +5,7 @@ const useStyle = makeStyles()({
   container: {
     width: "100%",
     maxWidth: "740px",
-    padding: "30px 10px 0",
+    padding: "30px 10px 10px",
     margin: "0 auto",
     "& input.form-control:focus": {
       borderColor: "none",

@@ -44,9 +44,20 @@ const AutoCompleteField: React.FC<Props> = (props) => {
     }
   }, []);
 
+  const customOnBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
+    e.target.value = state["field"] || "";
+  };
+
   return (
     <div {...parentProps} className={`${parentProps?.className || ""} ${classes.autocomplete}`} ref={inputParentRef}>
-      <input {...inputProps} {...registerProps} />
+      <input
+        {...inputProps}
+        {...registerProps}
+        onBlur={(e) => {
+          customOnBlur(e);
+          registerProps.onBlur(e);
+        }}
+      />
       {errors[field] && (
         <span className="text-danger">
           <small>{errors[field]?.message as string}</small>

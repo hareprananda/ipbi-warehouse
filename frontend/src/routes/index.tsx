@@ -5,6 +5,7 @@ import Home from "@/page/home/Home";
 import ManageReq from "@/page/manageReq/ManageReq";
 import Manager from "@/page/manager/Manager";
 import Request from "@/page/request/Request";
+import RequestSuccess from "@/page/request/RequestSuccess";
 import Requester from "@/page/requester/Requester";
 import Setting from "@/page/setting/Setting";
 import React from "react";
@@ -15,6 +16,7 @@ export const Guest = () => {
     <>
       <Route path={routes.login} element={<Login />} />
       <Route path={routes.request} element={<Request />} />
+      <Route path={routes.requestSuccess} element={<RequestSuccess />} />
     </>
   );
 };

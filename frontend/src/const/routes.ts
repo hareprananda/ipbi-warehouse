@@ -7,6 +7,7 @@ const routes = {
   manager: "/manager",
   setting: "/setting",
   manageRequest: "/request",
+  requestSuccess: "/request-success",
 };
 
 export default routes;
