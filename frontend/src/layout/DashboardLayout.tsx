@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import action from "@/redux/reduceraction";
-import { faArrowLeft, faBars, faBell, faCog, faEllipsisVertical, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBars, faCog, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
