@@ -34,7 +34,7 @@ const ReduxProvider: React.FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = TypeReducer<"getInitialState">;
 export type AppDispatch = ThunkDispatch<RootState, any, Action>;
 
 export default ReduxProvider;

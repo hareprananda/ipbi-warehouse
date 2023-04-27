@@ -64,9 +64,9 @@ const StatusModal: React.FC = () => {
       >
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
-            <div className={`modal-header border-bottom ${icons[statusModalType].bg}`}>
+            <div className={`modal-header border-bottom ${icons[statusModalType as keyof typeof icons].bg}`}>
               <h5 className="modal-title text-white" style={{ fontWeight: 500 }}>
-                {icons[statusModalType].title}
+                {icons[statusModalType as keyof typeof icons].title}
               </h5>
               <button
                 type="button"
@@ -79,7 +79,7 @@ const StatusModal: React.FC = () => {
               </button>
             </div>
             <div className="modal-body d-flex">
-              <div className="d-flex">{icons[statusModalType].component}</div>
+              <div className="d-flex">{icons[statusModalType as keyof typeof icons].component}</div>
               <div className="ml-2" style={{ marginLeft: "15px" }}>
                 {statusModalMessage}
               </div>
@@ -87,7 +87,7 @@ const StatusModal: React.FC = () => {
             <div className="modal-footer border-top" style={{ padding: "6px 12px" }}>
               <button
                 type="button"
-                className={`btn ${icons[statusModalType].btn}`}
+                className={`btn ${icons[statusModalType as keyof typeof icons].btn}`}
                 data-bs-dismiss="modal"
                 style={{ padding: "6px 25px" }}
               >

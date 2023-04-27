@@ -180,7 +180,7 @@ const Setting: React.FC = () => {
           <div className="modal-content">
             <div className={`modal-header border-bottom`}>
               <h5 className="modal-title " style={{ fontWeight: 500 }}>
-                Update {wording[activeKey]}
+                Update {wording[activeKey as keyof typeof wording]}
               </h5>
               <button
                 type="button"
@@ -195,17 +195,17 @@ const Setting: React.FC = () => {
             </div>
             <Form
               onSubmit={onSubmitFormModal}
-              key={activeKey}
+              key={activeKey as unknown as string}
               validation={yup.object({ [activeKey]: yup.string().required() })}
               defaultValues={{ [activeKey]: authState[activeKey] }}
             >
               <div className="modal-body ">
                 <p className="m-0" style={{ fontSize: "15px" }}>
-                  {wording[activeKey]}
+                  {wording[activeKey as keyof typeof wording]}
                 </p>
                 <TextField
                   type={activeKey === "phoneNumber" ? "number" : "text"}
-                  field={activeKey}
+                  field={activeKey as unknown as string}
                   className="form-control"
                 />
               </div>
