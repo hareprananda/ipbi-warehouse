@@ -12,6 +12,11 @@ import { ContactModule } from './contact/contact.module';
 import { GoodsModule } from './goods/goods.module';
 import { CommonModule } from './common/common.module';
 import { ProfileModule } from './profile/profile.module';
+import { ReportController } from './report/report.controller';
+import { ReportService } from './report/report.service';
+import { ReportModule } from './report/report.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import path from 'path';
 
 @Module({
   providers: [
@@ -22,6 +27,9 @@ import { ProfileModule } from './profile/profile.module';
   ],
   imports: [
     ConfigModule.forRoot({ isGlobal: true, cache: false }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'public'),
+    }),
     AuthModule.forRoot(),
     PrismaModule,
     UserModule,
@@ -32,6 +40,7 @@ import { ProfileModule } from './profile/profile.module';
     GoodsModule,
     CommonModule,
     ProfileModule,
+    ReportModule,
   ],
 })
 export class AppModule {}

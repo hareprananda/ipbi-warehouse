@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	
+</head>
+<body>  
+  <div>
+    <div>
+      <!-- KOP -->
+      <div  class="align-items-center flexer" style="position:relative">
+        <img style="position:absolute;top:0px;left:0" src="{{ baseUrl }}/logo.png" width="90px" >
+        <div class="header_kop" >
+          <h2 style="font-size:18px;font-family: 'Arial'; text-align: center">Laporan Gudang IPBI</h2>
+          <h4 style="font-size: 14px;font-family: 'Arial';margin-top: 3px;text-align: center">{{ periode }}</h4>
+        </div>
+      </div>      
+     
+      <table style="width: 100%; border-collapse: collapse;border: none; margin-top: 20px;" >
+        <tbody>
+            {{ content }}
+        </tbody>
+      </table>
+      
+
+    </div>
+      
+  </div>
+
+
+
+</body>
+<style type="text/css">
+	body *{
+    font-family: "Arial, Helvetica, sans-serif";
+  }
+  .flexer{
+    align-items: flex-start;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    position: static;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  h2{
+    font-size: 18px;
+  }
+  h3{
+    font-size: 16px;
+  }
+  h4{
+    font-size: 15px;
+  }
+  th{
+    font-size: 14px;
+  }
+  p, td{
+    font-size: 10px;
+  }
+  .container{
+    max-width: 1250px;
+  }
+  .header_kop{
+    border-bottom: 2px solid #000000;
+    width: calc(100% - 100px);
+    padding: 10px 0 15px;
+    margin-left: 100px;
+  }
+  .header_kop h2, .header_kop h4 {
+    margin:  0 100px 0 0;
+  }
+  .col-md{
+    margin: 5px 10px;
+  }
+  .kop {
+    margin-left: 40px;
+    max-width: 600px;
+  }
+  .isi{
+    margin: 20px;
+  }
+  .main{
+    max-width: 27.9cm;
+    margin: 5px 15px;
+  }
+  td {
+    padding: 7px 3px;
+  }
+  td p{
+    margin: 0;
+    
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  td:nth-child(2) {
+    width: 130px;
+  }
+  td p:first-child {
+    color: #54667A;
+  }
+  td p:nth-child(2) {
+    color: black;
+    font-weight: bold;
+    font-size: 12px;
+  }
+  td {
+    vertical-align: baseline;
+    border-bottom: 1px solid #E9ECEF;
+  }
+</style>
+</html>

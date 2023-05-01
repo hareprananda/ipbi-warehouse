@@ -7,9 +7,10 @@ import useStyle from "./PagedFilters.styles";
 
 interface Props extends PropsWithChildren {
   filterLabel?: (labelObj: Record<string, string>) => Record<string, string>;
+  otherButton?: JSX.Element;
 }
 
-const PagedFilters: React.FC<Props> = ({ children, filterLabel }) => {
+const PagedFilters: React.FC<Props> = ({ children, filterLabel, otherButton }) => {
   const PNContext = useContext(PagedNumberCtx);
   const [openPopover, setOpenPopover] = useState(false);
   const [hideEl, setHideEl] = useState(true);
@@ -95,7 +96,7 @@ const PagedFilters: React.FC<Props> = ({ children, filterLabel }) => {
   return (
     <>
       <div className="position-relative">
-        <div className="p-2 border-bottom">
+        <div className="p-2 border-bottom d-flex justify-content-between align-items-center">
           <button className={`btn btn-outline-secondary ${classes.filterButton}`} onClick={() => setOpenPopover(true)}>
             <div className="d-flex align-items-center gap-1">
               <FontAwesomeIcon icon={faFilter} style={{ fontSize: "15px" }} />
@@ -104,6 +105,7 @@ const PagedFilters: React.FC<Props> = ({ children, filterLabel }) => {
               </p>
             </div>
           </button>
+          {otherButton}
         </div>
         {!!chipsArr.length && <div className={`p-2 ${classes.appliedFilterContainer}`}>{chipsArr}</div>}
         {!hideEl && (

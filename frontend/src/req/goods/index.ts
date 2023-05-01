@@ -47,6 +47,16 @@ class Api {
       url: `/goods/${uuid}`,
     });
   }
+
+  monthlyReport(month: string) {
+    return apiCall<{ url: string }>({
+      method: "GET",
+      url: `/report/generate`,
+      params: {
+        month,
+      },
+    });
+  }
 }
 
 const goodsApi = new Api();

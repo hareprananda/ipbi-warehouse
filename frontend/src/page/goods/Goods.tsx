@@ -6,7 +6,7 @@ import PagedNumber, { PagedNumberRef } from "@/component/pagednumber/PagedNumber
 import PagedFilters from "@/component/pagednumber/PagedFilters";
 import TextField from "@/component/form/TextField/TextField";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import useCommonStyle from "@/component/style/common.style";
 import Button from "@/component/button/Button";
 import GoodsHistory from "./GoodsHistory";
@@ -14,6 +14,8 @@ import useStyle from "./Goods.styles";
 import Form from "@/component/form/Form";
 import action from "@/redux/reduceraction";
 import * as yup from "yup";
+import SelectField from "@/component/form/SelectField/SelectField";
+import { idDayJs } from "@/config/helper";
 
 const validationObj = yup.object({
   unit: yup.string().required(),
@@ -139,6 +141,16 @@ const Goods: FC = () => {
     );
   };
 
+  const onSubmitDownloadReport = (value: { month: string }) => {
+    dispatch(action.ui.showLoading());
+    dispatch(goodsApi.monthlyReport(value.month)).then((res) => {
+      dispatch(action.ui.dismissLoading());
+      if (res.data) {
+        window.open(res.data.url, "_blank");
+      } else dispatch(action.ui.showStatusModal({ type: "error", message: res.message[0] }));
+    });
+  };
+
   return (
     <div style={{ paddingTop: "15px" }}>
       <div className="container-fluid">
@@ -146,10 +158,11 @@ const Goods: FC = () => {
           <h2 className="page-title" style={{ fontWeight: "bold" }}>
             Barang
           </h2>
-
-          <Button className="btn btn-info" onClick={() => openFormModal()}>
-            <p className="m-0">Tambah Barang</p>
-          </Button>
+          <div>
+            <Button className="btn btn-info" onClick={() => openFormModal()}>
+              <p className="m-0">Tambah Barang</p>
+            </Button>
+          </div>
         </div>
 
         <div className="card" style={{ overflow: "hidden" }}>
@@ -158,7 +171,20 @@ const Goods: FC = () => {
               <PagedNumber ref={pagedNumberRef} urlTrack={false} fetchData={fetchGoods} items={renderGoodsItem}>
                 {({ renderItem }) => (
                   <>
-                    <PagedFilters>
+                    <PagedFilters
+                      otherButton={
+                        <Button
+                          type="button"
+                          className="btn btn-outline-info"
+                          data-bs-toggle="modal"
+                          data-bs-target="#downloadReport"
+                          style={{ marginLeft: "10px" }}
+                        >
+                          <FontAwesomeIcon icon={faDownload} style={{ marginRight: "5px" }} />
+                          Laporan
+                        </Button>
+                      }
+                    >
                       <div className="row align-items-center">
                         <div className="col-3">
                           <p className="m-0">Nama :</p>
@@ -219,6 +245,45 @@ const Goods: FC = () => {
               </div>
               <div className="modal-footer border-top">
                 <Button className="btn btn-info">Simpan</Button>
+              </div>
+            </Form>
+          </div>
+        </div>
+      </div>
+
+      <div className="modal fade" id="downloadReport" aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header border-bottom">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Download Laporan
+              </h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <Form onSubmit={onSubmitDownloadReport}>
+              <div className="modal-body">
+                <div>
+                  <p className="m-0">Periode</p>
+                  <SelectField
+                    options={Array(12)
+                      .fill(0)
+                      .map((_, idx) => {
+                        return {
+                          label: idDayJs()
+                            .subtract(idx + 1, "month")
+                            .format("MMM YYYY"),
+                          value: idDayJs()
+                            .subtract(idx + 1, "month")
+                            .format("YYYY-MM"),
+                        };
+                      })}
+                    className="form-control"
+                    field="month"
+                  />
+                </div>
+              </div>
+              <div className="modal-footer border-top">
+                <Button className="btn btn-info">Download</Button>
               </div>
             </Form>
           </div>
