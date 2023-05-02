@@ -11,7 +11,7 @@ services:
     networks:
       - ipbi_network
     volumes:
-      - ./backend/public:./public
+      - ./backend/public:/public
   app_fe: 
     build: 
       context: .
