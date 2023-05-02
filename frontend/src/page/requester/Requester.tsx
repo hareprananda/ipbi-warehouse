@@ -21,6 +21,7 @@ const Requester: React.FC = () => {
   };
 
   const clickContact = (phone: string) => {
+    if (/^08/.test(phone)) phone = `62${phone.slice(1)}`;
     window.open(`https://wa.me/${phone}`, "_blank");
   };
 

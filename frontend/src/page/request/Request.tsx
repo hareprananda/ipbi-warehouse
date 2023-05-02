@@ -88,7 +88,6 @@ const Request: React.FC = () => {
             <p className={classes.cardTitle}>Nomor Telepon</p>
             <TextField
               field="phoneNumber"
-              prefix="+62"
               type="number"
               className="form-control"
               placeholder="Nomor telepon..."
@@ -171,7 +170,7 @@ const Request: React.FC = () => {
                 </div>
               ))}
             <div className="d-flex justify-content-end">
-              <button className="btn btn-outline-secondary" onClick={() => setGoodsNumber((c) => ++c)}>
+              <button type="button" className="btn btn-outline-secondary" onClick={() => setGoodsNumber((c) => ++c)}>
                 Tambah
               </button>
             </div>

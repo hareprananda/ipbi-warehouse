@@ -19,6 +19,7 @@ const RequestSuccess: React.FC = () => {
     dispatch(userApi.adminContact()).then((res) => {
       dispatch(action.ui.dismissLoading());
       if (res.data) {
+        if (/^08/.test(res.data.phone)) res.data.phone = `62${res.data.phone.slice(1)}`;
         setPhoneNumber(res.data.phone);
       } else dispatch(action.ui.showStatusModal({ type: "error", message: res.message[0] }));
     });
