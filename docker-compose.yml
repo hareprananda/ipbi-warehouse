@@ -6,6 +6,8 @@ services:
       dockerfile: ./backend/Dockerfile
     ports:
       - 8000:8000
+    environment:
+      OPENSSL_CONF: /etc/ssl/
     networks:
       - ipbi_network
   app_fe: 
