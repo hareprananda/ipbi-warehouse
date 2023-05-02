@@ -12,8 +12,7 @@ import { ContactModule } from './contact/contact.module';
 import { GoodsModule } from './goods/goods.module';
 import { CommonModule } from './common/common.module';
 import { ProfileModule } from './profile/profile.module';
-import { ReportController } from './report/report.controller';
-import { ReportService } from './report/report.service';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { ReportModule } from './report/report.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import path from 'path';
@@ -24,8 +23,16 @@ import path from 'path';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
   imports: [
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 35,
+    }),
     ConfigModule.forRoot({ isGlobal: true, cache: false }),
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'public'),
