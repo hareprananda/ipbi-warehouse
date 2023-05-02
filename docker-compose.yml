@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: ./frontend/Dockerfile
     ports:
-      - 4000:4000
+      - 80:4000
     networks:
       - ipbi_network
   db:
