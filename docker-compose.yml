@@ -10,6 +10,8 @@ services:
       OPENSSL_CONF: /etc/ssl/
     networks:
       - ipbi_network
+    volumes:
+      - ./backend/public:./public
   app_fe: 
     build: 
       context: .
@@ -26,8 +28,13 @@ services:
       POSTGRES_USER: "${DB_USER}"
       POSTGRES_PASSWORD: "${DB_PASSWORD}"
       POSTGRES_DB: "${DB_NAME}"
+    volumes:
+      - ipbi_pgdata:/var/lib/postgresql/data
     networks:
       - ipbi_network
+
+volumes:
+  ipbi_pgdata:
 
 networks:
   ipbi_network:
