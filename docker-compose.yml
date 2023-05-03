@@ -11,7 +11,7 @@ services:
     networks:
       - ipbi_network
     volumes:
-      - ./backend/public:/public
+      - report_file:/var/app/ipbi-be/public
   app_fe: 
     build: 
       context: .
@@ -35,6 +35,7 @@ services:
 
 volumes:
   ipbi_pgdata:
+  report_file:
 
 networks:
   ipbi_network:
