@@ -7,6 +7,7 @@ interface Props extends HTMLProps<HTMLInputElement> {
   field: string;
   options: { value: string; label: string }[];
   parentProps?: HTMLProps<HTMLDivElement>;
+  onExternalChange?: (val: any) => void;
 }
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
@@ -17,10 +18,11 @@ const AutoCompleteField: React.FC<Props> = (props) => {
 
   const { register, errors, setValue, state } = useContext(FormContex);
 
-  const { field, options, parentProps, ...inputProps } = props;
+  const { field, options, parentProps, onExternalChange, ...inputProps } = props;
 
   const changeVal = useCallback(
     (val: any) => {
+      onExternalChange?.(val);
       setValue(field, val);
     },
     [field, setValue]
@@ -42,7 +44,7 @@ const AutoCompleteField: React.FC<Props> = (props) => {
       const inputEl = inputParentRef.current?.querySelector("input") as HTMLInputElement;
       inputEl.value = options.find((v) => v.value === state[props.field])?.label as string;
     }
-  }, []);
+  }, [state[props.field]]);
 
   const customOnBlur = (e: React.FocusEvent<HTMLInputElement, Element>) => {
     e.target.value = state["field"] || "";
@@ -53,6 +55,7 @@ const AutoCompleteField: React.FC<Props> = (props) => {
       <input
         {...inputProps}
         {...registerProps}
+        id={field}
         onBlur={(e) => {
           customOnBlur(e);
           registerProps.onBlur(e);

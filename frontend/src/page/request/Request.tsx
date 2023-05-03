@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useStyle from "./Request.styles";
 import logo from "@/assets/images/logo.png";
-import Form from "@/component/form/Form";
+import Form, { FormRef } from "@/component/form/Form";
 import TextField from "@/component/form/TextField/TextField";
 import SelectField from "@/component/form/SelectField/SelectField";
 import dayjs from "dayjs";
-import AutoCompleteField from "@/component/form/AutoCompleteField/AutoCompleteField";
 import { useAppDispatch } from "@/hooks/useRedux";
 import goodsApi from "@/req/request";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,9 +19,12 @@ const Request: React.FC = () => {
   const [isBorrow, setIsBorrow] = useState(false);
   const [pickUpDate, setPickUpDate] = useState<string | undefined>();
   const [goodsOption, setGoodsOption] = useState<{ value: string; label: string }[]>([]);
+  const [optionsLength, setOptionsLength] = useState(1);
   const dispatch = useAppDispatch();
-  const [goodsNumber, setGoodsNumber] = useState(1);
+  const lastFieldIdx = useRef(1);
+  const [goodsFieldIdx, setGoodsFieldIdx] = useState([1]);
   const navigate = useNavigate();
+  const formRef = useRef<FormRef>(null);
 
   const submitVal = (values: Record<string, string>) => {
     const { name, phoneNumber, pickUpDate, requestType, returnDate, ...restGoods } = values;
@@ -59,17 +61,61 @@ const Request: React.FC = () => {
     setPickUpDate(values.pickUpDate);
   };
 
+  const goodsOptionRef = useRef<typeof goodsOption>([]);
+
   useEffect(() => {
     dispatch(goodsApi.allGoods()).then((res) => {
       if (res.data) {
-        setGoodsOption(res.data.map((v) => ({ label: v.name, value: v.uuid })));
+        const options = res.data.map((v) => ({ label: v.name, value: v.uuid }));
+        setOptionsLength(res.data.length);
+        goodsOptionRef.current = options;
+        setGoodsOption(options);
       }
     });
   }, []);
 
+  const goodsValObj = useRef<Record<string, { value: string; label: string }>>({});
+  const goodsValSet = useRef(new Set<string>());
+
+  const getOptions = (fieldName: string) => {
+    const options = goodsOptionRef.current.filter(
+      (v) => !goodsValSet.current.has(v.value) || v.value === goodsValObj.current[fieldName]?.value
+    );
+    return options;
+  };
+
+  const onChangeDropdownVal = (field: string, value: string) => {
+    if (!!value) {
+      if (goodsValObj.current[field]) {
+        goodsValSet.current.delete(goodsValObj.current[field].value);
+      }
+      goodsValObj.current[field] = goodsOptionRef.current.find((v) => v.value === value) as {
+        value: string;
+        label: string;
+      };
+      goodsValSet.current.add(value);
+    } else {
+      if (goodsValObj.current[field]) {
+        goodsValSet.current.delete(goodsValObj.current[field].value);
+        // @ts-ignore
+        goodsValObj.current[field] = undefined;
+      }
+    }
+    setGoodsOption(goodsOptionRef.current.filter((v) => !goodsValSet.current.has(v.value)));
+  };
+
+  const addNewGoods = () => {
+    setGoodsFieldIdx((c) => c.concat(++lastFieldIdx.current));
+  };
+
+  const onRemoveGoods = (index: number, field: string) => {
+    setGoodsFieldIdx((c) => c.slice(0, index).concat(c.slice(index + 1)));
+    onChangeDropdownVal(field, "");
+  };
+
   return (
     <div className={`${classes.container}`}>
-      <Form onSubmit={submitVal} className="form-horizontal mt-3 form-material" onChange={onChangeVal}>
+      <Form ref={formRef} onSubmit={submitVal} className="form-horizontal mt-3 form-material" onChange={onChangeVal}>
         <div className={`card  ${classes.topCard} ${classes.card}`}>
           <div className="card-body">
             <div className="d-flex">
@@ -139,41 +185,52 @@ const Request: React.FC = () => {
         <div className={`card ${classes.card}`}>
           <div className="card-body">
             <p className={classes.cardTitle}>Barang</p>
-            {Array(goodsNumber)
-              .fill(0)
-              .map((_, idx) => (
-                <div key={idx} className="d-flex align-items-center" style={{ gap: "10px" }}>
-                  <div className="row" style={{ flex: "auto" }}>
-                    <div className="col-6">
-                      <AutoCompleteField
-                        className="form-control"
-                        placeholder="Pilih Barang..."
-                        parentProps={{
-                          className: "input-group mb-3",
-                        }}
-                        field={`${idx}goods`}
-                        options={goodsOption}
-                      />
-                    </div>
-                    <div className="col-6">
-                      <TextField
-                        field={`${idx}goods-amount`}
-                        className="form-control"
-                        type="number"
-                        placeholder="Jumlah..."
-                      />
-                    </div>
+            {goodsFieldIdx.map((idx, key) => (
+              <div key={key} className="d-flex align-items-center" style={{ gap: "10px" }}>
+                <div className="row" style={{ flex: "auto" }}>
+                  <div className="col-6">
+                    <SelectField
+                      className="form-control"
+                      placeholder="Pilih Barang..."
+                      // @ts-ignore
+                      onExternalChange={(val) => onChangeDropdownVal(`${idx}goods`, val)}
+                      parentProps={{
+                        className: "input-group mb-3",
+                      }}
+                      field={`${idx}goods`}
+                      options={getOptions(`${idx}goods`)}
+                    />
                   </div>
-                  <div role="button" style={{ transform: "translate(0, -13px)" }}>
-                    <FontAwesomeIcon icon={faTimes} className="text-danger" style={{ fontSize: "22px" }} />
+                  <div className="col-6">
+                    <TextField
+                      field={`${idx}goods-amount`}
+                      required
+                      className="form-control"
+                      type="number"
+                      placeholder="Jumlah..."
+                    />
                   </div>
                 </div>
-              ))}
-            <div className="d-flex justify-content-end">
-              <button type="button" className="btn btn-outline-secondary" onClick={() => setGoodsNumber((c) => ++c)}>
-                Tambah
-              </button>
-            </div>
+                <div
+                  role="button"
+                  onClick={() => (key > 0 ? onRemoveGoods(key, `${idx}goods`) : null)}
+                  style={{ transform: "translate(0, -13px)" }}
+                >
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    className="text-danger"
+                    style={{ fontSize: "22px", opacity: key > 0 ? 1 : 0 }}
+                  />
+                </div>
+              </div>
+            ))}
+            {goodsFieldIdx.length < optionsLength && (
+              <div className="d-flex justify-content-end">
+                <button type="button" className="btn btn-outline-secondary" onClick={addNewGoods}>
+                  Tambah
+                </button>
+              </div>
+            )}
           </div>
         </div>
 

@@ -61,6 +61,7 @@ class Api {
   }
 
   createRequest(data: Model.RequestPayload) {
+    if (data.returnDate === "" || data.requestType === "TAKE") delete data["returnDate"];
     return apiCall({
       method: "POST",
       url: `/request`,

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, createContext, useEffect } from "react";
+import React, { PropsWithChildren, createContext, useEffect, useImperativeHandle } from "react";
 import { FieldValues, UseFormRegister, useForm, FormState, UseFormSetValue } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -20,29 +20,42 @@ interface Props extends PropsWithChildren {
   defaultValues?: Record<string, any>;
 }
 
-const Form: React.FC<Props> = ({ onSubmit, validation, children, className, onChange, defaultValues }) => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors },
-    setValue,
-    watch,
-  } = useForm({
-    mode: "onChange",
-    resolver: validation && yupResolver(validation),
-    defaultValues,
-  });
-  const state = watch();
+export interface FormRef {
+  getValue(field: string): any;
+}
 
-  useEffect(() => {
-    onChange?.(state);
-  }, [state, onChange]);
+const Form = React.forwardRef<FormRef, Props>(
+  ({ onSubmit, validation, children, className, onChange, defaultValues }, ref) => {
+    const {
+      handleSubmit,
+      register,
+      formState: { errors },
+      setValue,
+      getValues,
+      watch,
+    } = useForm({
+      mode: "onChange",
+      resolver: validation && yupResolver(validation),
+      defaultValues,
+    });
+    const state = watch();
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className={className}>
-      <FormContex.Provider value={{ errors: errors, register, setValue, state }}>{children}</FormContex.Provider>
-    </form>
-  );
-};
+    useEffect(() => {
+      onChange?.(state);
+    }, [state, onChange]);
+
+    useImperativeHandle(ref, () => ({
+      getValue: getValues,
+    }));
+
+    return (
+      <form onSubmit={handleSubmit(onSubmit)} className={className}>
+        <FormContex.Provider value={{ errors: errors, register, setValue, state }}>{children}</FormContex.Provider>
+      </form>
+    );
+  }
+);
+
+Form.displayName = "Form";
 
 export default Form;

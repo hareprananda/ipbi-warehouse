@@ -4,7 +4,7 @@ import { RequestService } from './request.service';
 import { Public } from 'src/auth/auth.guard';
 import { Response } from 'express';
 import { Param, Patch, Req } from '@nestjs/common/decorators';
-import { Request } from 'src/helper';
+import { HttpReturn, Request } from 'src/helper';
 
 @Controller('request')
 export class RequestController {
@@ -13,6 +13,10 @@ export class RequestController {
   @Post()
   @Public()
   async createRequest(@Body() data: RequestDto, @Res() response: Response) {
+    if (data.goods.length === 0) {
+      response.status(400).json(HttpReturn(`Goods can't be empty`, 400));
+      return;
+    }
     const create = await this.request.addRequest(data);
     response.status(create.statusCode).json(create);
   }
