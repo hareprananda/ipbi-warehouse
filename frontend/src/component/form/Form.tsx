@@ -22,6 +22,7 @@ interface Props extends PropsWithChildren {
 
 export interface FormRef {
   getValue(field: string): any;
+  unRegister(field: string | string[]): void;
 }
 
 const Form = React.forwardRef<FormRef, Props>(
@@ -29,6 +30,7 @@ const Form = React.forwardRef<FormRef, Props>(
     const {
       handleSubmit,
       register,
+      unregister,
       formState: { errors },
       setValue,
       getValues,
@@ -46,6 +48,7 @@ const Form = React.forwardRef<FormRef, Props>(
 
     useImperativeHandle(ref, () => ({
       getValue: getValues,
+      unRegister: unregister,
     }));
 
     return (

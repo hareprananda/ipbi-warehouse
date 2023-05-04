@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import useStyle from "./Request.styles";
 import logo from "@/assets/images/logo.png";
 import Form, { FormRef } from "@/component/form/Form";
@@ -20,6 +20,7 @@ const Request: React.FC = () => {
   const [pickUpDate, setPickUpDate] = useState<string | undefined>();
   const [goodsOption, setGoodsOption] = useState<{ value: string; label: string }[]>([]);
   const [optionsLength, setOptionsLength] = useState(1);
+  const [requestType, setRequestType] = useState("");
   const dispatch = useAppDispatch();
   const lastFieldIdx = useRef(1);
   const [goodsFieldIdx, setGoodsFieldIdx] = useState([1]);
@@ -32,6 +33,10 @@ const Request: React.FC = () => {
     for (const goodsKey in restGoods) {
       const amount = parseInt(restGoods[`${goodsKey}-amount`] || "0");
       if (!amount) continue;
+      if (!goodsOptionSetRef.current.has(restGoods[goodsKey])) {
+        dispatch(action.ui.showStatusModal({ type: "error", message: "Mohon periksa barang yang anda pilih" }));
+        return;
+      }
       goodsObj[restGoods[goodsKey]] = amount;
     }
     const goodsArr: { id: string; amount: number }[] = [];
@@ -62,17 +67,30 @@ const Request: React.FC = () => {
   };
 
   const goodsOptionRef = useRef<typeof goodsOption>([]);
+  const goodsOptionSetRef = useRef(new Set<string>());
 
-  useEffect(() => {
-    dispatch(goodsApi.allGoods()).then((res) => {
+  const requestGoodsOfType = (type: string) => {
+    formRef.current?.unRegister(
+      goodsFieldIdx.reduce((acc, v) => [...acc, `${v}goods`, `${v}goods-amount`], [] as string[])
+    );
+    setRequestType(type);
+    setGoodsFieldIdx([++lastFieldIdx.current]);
+    dispatch(goodsApi.allGoods(type)).then((res) => {
       if (res.data) {
-        const options = res.data.map((v) => ({ label: v.name, value: v.uuid }));
+        const valueSet = new Set<string>();
+        const options = res.data.map((v) => {
+          valueSet.add(v.uuid);
+          return { label: v.name, value: v.uuid };
+        });
         setOptionsLength(res.data.length);
         goodsOptionRef.current = options;
+        goodsOptionSetRef.current = valueSet;
+        goodsValObj.current = {};
+        goodsValSet.current = new Set();
         setGoodsOption(options);
       }
     });
-  }, []);
+  };
 
   const goodsValObj = useRef<Record<string, { value: string; label: string }>>({});
   const goodsValSet = useRef(new Set<string>());
@@ -163,6 +181,7 @@ const Request: React.FC = () => {
             <p className={classes.cardTitle}>Tipe Request</p>
             <SelectField
               placeholder="Pilih tipe request..."
+              onExternalChange={requestGoodsOfType}
               options={[
                 {
                   label: "Peminjaman",
@@ -210,6 +229,11 @@ const Request: React.FC = () => {
                       placeholder="Jumlah..."
                     />
                   </div>
+                  {!requestType && (
+                    <div className="col-12">
+                      <p className="m-0 text-danger">Silahkan pilih tipe request terlebih dahulu</p>
+                    </div>
+                  )}
                 </div>
                 <div
                   role="button"

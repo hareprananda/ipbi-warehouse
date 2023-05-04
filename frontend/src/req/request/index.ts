@@ -3,10 +3,13 @@ import { Pagination } from "../globalType";
 import * as Model from "./request.model";
 
 class Api {
-  allGoods() {
+  allGoods(type: string) {
     return apiCall<Model.AllGoods>({
       method: "GET",
       url: "/goods/all",
+      params: {
+        type,
+      },
     });
   }
 

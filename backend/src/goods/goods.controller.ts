@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Res, Req, Get, Query, Param, Patch, Delete } from '@nestjs/common';
-import { UUIDParam, GoodsPayload, GoodsQuery, History } from './dto';
+import { UUIDParam, GoodsPayload, GoodsQuery, History, GoodsType } from './dto';
 import { Response } from 'express';
 import { GoodsService } from './goods.service';
 import { Request } from 'src/helper';
@@ -60,8 +60,9 @@ export class GoodsController {
 
   @Get('/all')
   @Public()
-  async getAll(@Res() response: Response) {
-    const data = await this.goods.getAllGoods();
+  async getAll(@Query() query: GoodsType, @Res() response: Response) {
+    const { type } = query;
+    const data = await this.goods.getAllGoods(type);
     response.status(data.statusCode).json(data);
   }
 }

@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsUUID, IsNumberString, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsUUID, IsNumberString, Min, IsEnum } from 'class-validator';
 
 export class GoodsPayload {
   @IsString()
@@ -39,4 +39,14 @@ export class GoodsQuery {
   @IsNumberString()
   @IsOptional()
   limit?: string;
+}
+
+export enum GoodsTypeEnum {
+  BORROW = 'BORROW',
+  TAKE = 'TAKE',
+}
+
+export class GoodsType {
+  @IsEnum(GoodsTypeEnum)
+  type: GoodsTypeEnum;
 }

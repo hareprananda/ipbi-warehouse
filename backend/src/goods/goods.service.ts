@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GoodsPayload } from './dto';
+import { GoodsPayload, GoodsTypeEnum } from './dto';
 import { randomUUID } from 'crypto';
 import { UserService } from 'src/user/user.service';
 import { HistoryService } from 'src/history/history.service';
@@ -154,7 +154,7 @@ export class GoodsService {
     }
   }
 
-  async getAllGoods() {
+  async getAllGoods(type: GoodsTypeEnum) {
     try {
       const data = await this.prisma.goods.findMany({
         orderBy: {
@@ -164,6 +164,10 @@ export class GoodsService {
           uuid: true,
           name: true,
           unit: true,
+        },
+        where: {
+          isBorrowable: type === GoodsTypeEnum.BORROW,
+          isTakeable: type === GoodsTypeEnum.TAKE,
         },
       });
 
