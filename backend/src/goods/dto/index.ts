@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsUUID, IsNumberString, Min, IsEnum } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsUUID, IsNumberString, Min, IsEnum, IsBoolean } from 'class-validator';
 
 export class GoodsPayload {
   @IsString()
@@ -10,6 +10,12 @@ export class GoodsPayload {
 
   @IsString()
   unitName: string;
+
+  @IsBoolean()
+  isBorrowable: boolean;
+
+  @IsBoolean()
+  isTakeable: boolean;
 }
 
 export class History {
@@ -31,6 +37,36 @@ export class GoodsQuery {
   @IsString()
   @IsOptional()
   name?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isBorrowable?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  isTakeable?: boolean;
+
+  @IsNumberString()
+  @IsOptional()
+  page?: string;
+
+  @IsNumberString()
+  @IsOptional()
+  limit?: string;
+}
+
+export class GoodsQueryFilter {
+  @IsString()
+  @IsOptional()
+  name?: string;
+
+  @IsString()
+  @IsOptional()
+  isBorrowable?: string;
+
+  @IsString()
+  @IsOptional()
+  isTakeable?: string;
 
   @IsNumberString()
   @IsOptional()

@@ -11,6 +11,8 @@ export type GoodsData = {
   uuid: string;
   unit: string;
   name: string;
+  isBorrowable: boolean;
+  isTakeable: boolean;
   stock: number;
 };
 

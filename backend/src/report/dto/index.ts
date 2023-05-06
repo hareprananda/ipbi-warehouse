@@ -11,6 +11,12 @@ export type GoodsReportQuery = {
   id: string;
   start: number;
   end: number;
-  isExist: boolean;
   change: number;
 };
+
+export interface SingleReport {
+  id: string;
+  name: string;
+  unit: string;
+  change: number;
+}

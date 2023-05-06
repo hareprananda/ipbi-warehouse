@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Res, Req, Get, Query, Param, Patch, Delete } from '@nestjs/common';
-import { UUIDParam, GoodsPayload, GoodsQuery, History, GoodsType } from './dto';
+import { UUIDParam, GoodsPayload, GoodsQuery, History, GoodsType, GoodsQueryFilter } from './dto';
 import { Response } from 'express';
 import { GoodsService } from './goods.service';
 import { Request } from 'src/helper';
@@ -34,8 +34,22 @@ export class GoodsController {
   }
 
   @Get()
-  async getGoods(@Query() { limit, name, page }: GoodsQuery, @Res() response: Response) {
-    const data = await this.goods.getGoods(name || '', { limit: parseInt(limit || '20'), page: parseInt(page || '1') });
+  async getGoods(
+    @Query() { limit, page, isBorrowable, isTakeable, ...filter }: GoodsQueryFilter,
+    @Res() response: Response,
+  ) {
+    const finalFilter: GoodsQuery = filter;
+
+    if (isBorrowable) {
+      finalFilter.isBorrowable = isBorrowable === 'true' ? true : false;
+    }
+    if (isTakeable) {
+      finalFilter.isTakeable = isTakeable === 'true' ? true : false;
+    }
+    const data = await this.goods.getGoods(finalFilter, {
+      limit: parseInt(limit || '20'),
+      page: parseInt(page || '1'),
+    });
     response.status(data.statusCode).json(data);
   }
 

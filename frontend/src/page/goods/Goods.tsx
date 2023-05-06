@@ -16,6 +16,7 @@ import action from "@/redux/reduceraction";
 import * as yup from "yup";
 import SelectField from "@/component/form/SelectField/SelectField";
 import { idDayJs } from "@/config/helper";
+import CheckboxField from "@/component/form/CheckboxField/CheckboxField";
 
 const validationObj = yup.object({
   unit: yup.string().required(),
@@ -59,12 +60,14 @@ const Goods: FC = () => {
     toggleModal();
   };
 
-  const onSubmit = ({ name, stock, unit }: Model.GoodsData) => {
+  const onSubmit = ({ name, stock, unit, isBorrowable, isTakeable }: Model.GoodsData) => {
     dispatch(action.ui.showLoading());
     const payload = {
       unitName: unit,
       name,
       stock,
+      isBorrowable,
+      isTakeable,
     };
     if (activeType === "add") return submitAdd(payload);
     else return submitEdit(payload);
@@ -192,9 +195,23 @@ const Goods: FC = () => {
                         <div className="col-9">
                           <TextField field="name" className="form-control" placeholder="Nama..." />
                         </div>
+                        <div className="col-3" />
+                        <div className="col-9">
+                          <div style={{ padding: "7px 0" }}>
+                            <CheckboxField field="isBorrowable" label="Dapat Dipinjam" />
+                          </div>
+                        </div>
+                        <div className="col-3" />
+                        <div className="col-9">
+                          <div style={{ padding: "7px 0" }}>
+                            <CheckboxField field="isTakeable" label="Dapat Diambil" />
+                          </div>
+                        </div>
                       </div>
                       <div className="d-flex justify-content-end mt-3">
-                        <button className="btn btn-info ml-auto">Submit</button>
+                        <button className="btn btn-info ml-auto" type="submit">
+                          Submit
+                        </button>
                       </div>
                     </PagedFilters>
                     <div className={`${commonClass.stickyTableContainer} ${classes.mainTable}`}>
@@ -241,6 +258,14 @@ const Goods: FC = () => {
                 <div className="mt-2">
                   <p className="m-0">Satuan</p>
                   <TextField className="form-control" field="unit" placeholder="" />
+                </div>
+
+                <div className="mt-2">
+                  <CheckboxField field="isBorrowable" label="Dapat dipinjam" />
+                </div>
+
+                <div className="mt-2">
+                  <CheckboxField field="isTakeable" label="Dapat diambil" />
                 </div>
               </div>
               <div className="modal-footer border-top">

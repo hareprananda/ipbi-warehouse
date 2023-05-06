@@ -27,6 +27,8 @@ export class GoodsService {
           unit: data.unitName,
           uuid: randomUUID(),
           stock: data.stock,
+          isBorrowable: data.isBorrowable,
+          isTakeable: data.isTakeable,
         },
       });
       return HttpReturn(goods, HttpStatus.OK);
@@ -75,23 +77,36 @@ export class GoodsService {
     }
   }
 
-  async getGoods(name: string, { limit, page }: { limit: number; page: number }) {
-    const nameFilter = '%' + name.toLowerCase() + '%';
+  private filterGenerator = (key: string, val: string | boolean) => {
+    const filter: Record<typeof key, string> = {
+      isBorrowable: `g."isBorrowable" = ${val}`,
+      isTakeable: `g."isTakeable" = ${val}`,
+      name: `LOWER(g."name") like '%${(val as string)?.replace?.(/['"]/g, '').toLowerCase()}%'`,
+    };
+    return filter[key];
+  };
 
-    const dataTotal: [{ totalRow: bigint }] = await this.prisma.$queryRaw`
-      select count(*) as "totalRow" from "Goods" where LOWER( "name"  ) like ${nameFilter}
-    `;
+  async getGoods(
+    filter: { name?: string; isBorrowable?: boolean; isTakeable?: boolean },
+    { limit, page }: { limit: number; page: number },
+  ) {
+    const filterArr = [] as string[];
+    for (const key in filter) filterArr.push(this.filterGenerator(key, filter[key]));
+    const filterString = filterArr.length > 0 ? `where ${filterArr.join(' and ')}` : '';
+
+    const dataTotal: [{ totalRow: bigint }] = await this.prisma.$queryRawUnsafe(`
+      select count(*) as "totalRow" from "Goods" g ${filterString}
+    `);
     const metadata = {
       totalPage: Math.ceil(parseInt(dataTotal[0]['totalRow'] as unknown as string) / limit),
       currentPage: page,
     };
 
-    const data = await this.prisma.$queryRaw`
-    select uuid, unit, name, stock from "Goods" where
-    LOWER("name") like ${nameFilter} 
+    const data = await this.prisma.$queryRawUnsafe(`
+    select uuid, unit, name, stock, "isBorrowable", "isTakeable" from "Goods" g ${filterString} 
     order by "updatedAt" desc
     limit ${limit} offset ${(page - 1) * limit}
-    `;
+    `);
     return HttpReturn({ data, metadata }, HttpStatus.OK);
   }
 
@@ -109,6 +124,8 @@ export class GoodsService {
             name: data.name,
             stock: data.stock,
             unit: data.unitName,
+            isBorrowable: data.isBorrowable,
+            isTakeable: data.isTakeable,
           },
         });
         if (!newData.id) throw 'err';

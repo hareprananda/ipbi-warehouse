@@ -59,7 +59,7 @@ const PagedFilters: React.FC<Props> = ({ children, filterLabel, otherButton }) =
   }, [hideEl]);
 
   const submitForm = (val: Record<string, any>) => {
-    for (const key in val) if (!val[key].trim()) delete val[key];
+    for (const key in val) if (!val[key]) delete val[key];
     setOpenPopover(false);
     setAppliedFilter(val);
     PNContext.submitFilter(val);
