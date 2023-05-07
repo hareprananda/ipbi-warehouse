@@ -178,7 +178,8 @@ const ManageReqDetail: React.FC<Props> = ({ activeData, onResetData, onChangeSta
   };
 
   const clickContact = () => {
-    window.open(`https://wa.me/${detailData.requesterPhone}`);
+    const contact = detailData.requesterPhone.replace(/^0(?=8)/g, "62");
+    window.open(`https://wa.me/${contact}`);
   };
 
   return (

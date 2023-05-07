@@ -21,8 +21,8 @@ const Requester: React.FC = () => {
   };
 
   const clickContact = (phone: string) => {
-    if (/^08/.test(phone)) phone = `62${phone.slice(1)}`;
-    window.open(`https://wa.me/${phone}`, "_blank");
+    const contact = phone.replace(/^0(?=8)/g, "62");
+    window.open(`https://wa.me/${contact}`, "_blank");
   };
 
   const clickHistory = (id: string) => {
