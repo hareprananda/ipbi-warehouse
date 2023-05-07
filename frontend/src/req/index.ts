@@ -31,7 +31,15 @@ const apiCall = <T>(props: Props) => {
         return res.data;
       })
       .catch((err: AxiosError) => {
-        if (err.response?.status === 401) dispatch(action.auth.reset());
+        if (err.response?.status === 401) {
+          dispatch(action.auth.reset());
+          return {
+            error: true,
+            message: ["Session Expired"],
+            statusCode: 500,
+            data: undefined,
+          } as ErrorResponse;
+        }
         return {
           error: true,
           message: ((err.response?.data as any).message as any) || [err.message],

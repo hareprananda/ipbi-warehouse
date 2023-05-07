@@ -64,7 +64,12 @@ const Manager: React.FC = () => {
       dispatch(action.ui.dismissLoading());
       if (res.data) {
         pagedRef.current?.saveFilter({});
-        dispatch(action.ui.showStatusModal({ type: "success", message: `Level ${data.name} berhasil diubah` }));
+        dispatch(
+          action.ui.showStatusModal({
+            type: "success",
+            message: `Level ${data.name} berhasil diubah, Mohon minta ${data.name} untuk melakukan login ulang`,
+          })
+        );
       } else dispatch(dispatch(action.ui.showStatusModal({ type: "error", message: res.message[0] })));
     });
   };

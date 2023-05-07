@@ -32,7 +32,7 @@ const Home: React.FC = () => {
       setPendingLoading(false);
       if (res.data) {
         setPendingReq(res.data);
-      } else dispatch(action.ui.showStatusModal({ message: res.message[0] }));
+      } else dispatch(action.ui.showStatusModal({ message: res.message[0], type: "error" }));
     });
   }, []);
 
