@@ -1,9 +1,10 @@
-import { Body, Controller, Post, Patch, Param, Res, Get, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Patch, Param, Res, Get, Delete, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AddPayload, ChangeLevel, DetailParam, UserQuery } from './dto';
 import { Admin } from 'src/auth/auth.guard';
 import { Response } from 'express';
 import { Query } from '@nestjs/common/decorators';
+import { Request } from 'src/helper';
 
 @Controller('user')
 @Admin()
@@ -24,15 +25,13 @@ export class UserController {
   }
 
   @Get()
-  async getUsers(@Query() q: UserQuery, @Res() response: Response) {
+  async getUsers(@Query() q: UserQuery, @Res() response: Response, @Req() req: Request) {
+    const currentUUID = req.user.uuid;
     const { limit, page } = q;
-    const data = await this.userService.getUser({ limit: parseInt(limit || '20'), page: parseInt(page || '1') });
-    response.status(data.statusCode).json(data);
-  }
-
-  @Get('/all-manager')
-  async getManager(@Res() response: Response) {
-    const data = await this.userService.getAllManager();
+    const data = await this.userService.getUser(
+      { limit: parseInt(limit || '20'), page: parseInt(page || '1') },
+      currentUUID,
+    );
     response.status(data.statusCode).json(data);
   }
 

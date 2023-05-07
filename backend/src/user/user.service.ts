@@ -73,11 +73,11 @@ export class UserService {
     return HttpReturn(user, HttpStatus.OK);
   }
 
-  async getUser({ limit, page }: { limit: number; page: number }) {
+  async getUser({ limit, page }: { limit: number; page: number }, currentUUID: string) {
     try {
       const metadata = await this.common.generatePageMetadata(
         this.prisma.$queryRaw`
-         select count(*) as "totalRow"  from "Users" where active = true
+         select count(*) as "totalRow"  from "Users" where active = true and uuid != ${currentUUID} and name != 'root'
       `,
         { limit, page },
       );
@@ -87,6 +87,8 @@ export class UserService {
         from "Users" u 
         left join "ActiveContact" ac on ac."userId" = u.id
         where active = true
+        and uuid != ${currentUUID}
+        and name != 'root'
         order by u."name" asc
         limit ${limit}  offset ${(page - 1) * limit}
       `;
