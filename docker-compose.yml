@@ -1,9 +1,10 @@
+version: '3'
 services:
   app_be:
     build:
-
       context: .
       dockerfile: ./backend/Dockerfile
+    restart: always
     ports:
       - 8000:8000
     environment:
@@ -16,12 +17,15 @@ services:
     build: 
       context: .
       dockerfile: ./frontend/Dockerfile
+    restart: always
     ports:
       - 80:4000
     networks:
       - ipbi_network
+    
   db:
     image: postgres:13
+    restart: always
     ports:
       - 5433:5432
     environment:
