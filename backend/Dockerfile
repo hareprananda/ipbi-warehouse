@@ -8,8 +8,6 @@ COPY .env .
 
 RUN yarn install
 
-RUN yarn migrate:prod
-
 RUN yarn build
 
 CMD [ "yarn", "start" ]
