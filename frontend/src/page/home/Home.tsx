@@ -133,7 +133,7 @@ const Home: React.FC = () => {
             <div className="card  m-0">
               <div className="border-bottom" style={{ padding: "14px 16px" }}>
                 <h5 className="card-title m-0" style={{ fontWeight: 500 }}>
-                  Goods
+                  Barang
                 </h5>
               </div>
               <div className={`card-body ${classes.goodsCardBody}`}>
@@ -152,21 +152,17 @@ const Home: React.FC = () => {
                         <td>
                           {goods.stock} {goods.unit}
                         </td>
-                        <td style={{ paddingRight: "16px" }}>
-                          <button
-                            className="btn btn-outline-info"
-                            style={{ fontSize: "13px", borderRadius: "9px", padding: "8px 12px" }}
-                          >
-                            History
-                          </button>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
                 {recentChange.length > 0 && (
                   <div className="d-flex justify-content-center my-2">
-                    <button className="btn btn-info" style={{ fontSize: "13px" }}>
+                    <button
+                      onClick={() => navigate(routes.goods)}
+                      className="btn btn-info"
+                      style={{ fontSize: "13px" }}
+                    >
                       Lihat lebih
                     </button>
                   </div>
