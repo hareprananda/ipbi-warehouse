@@ -26,9 +26,11 @@ const Request: React.FC = () => {
   const [goodsFieldIdx, setGoodsFieldIdx] = useState([1]);
   const navigate = useNavigate();
   const formRef = useRef<FormRef>(null);
+  const inputFileRef = useRef<HTMLInputElement>(null);
+  const [memoFileName, setMemoFileName] = useState("");
 
   const submitVal = (values: Record<string, string>) => {
-    const { name, phoneNumber, pickUpDate, requestType, returnDate, ...restGoods } = values;
+    const { name, phoneNumber, pickUpDate, requestType, returnDate, department, ...restGoods } = values;
     const goodsObj: Record<string, number> = {};
     for (const goodsKey in restGoods) {
       const amount = parseInt(restGoods[`${goodsKey}-amount`] || "0");
@@ -41,17 +43,18 @@ const Request: React.FC = () => {
     }
     const goodsArr: { id: string; amount: number }[] = [];
     for (const id in goodsObj) goodsArr.push({ id, amount: goodsObj[id] });
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("pickUpDate", pickUpDate);
+    formData.append("requestType", requestType);
+    formData.append("goods", JSON.stringify(goodsArr));
+    formData.append("returnDate", returnDate);
+    formData.append("department", department);
+    if (memoRef.current) formData.append("memo", memoRef.current);
     dispatch(action.ui.showLoading());
-    dispatch(
-      requestApi.createRequest({
-        name,
-        phoneNumber,
-        pickUpDate,
-        requestType,
-        goods: goodsArr,
-        returnDate,
-      })
-    ).then((res) => {
+    dispatch(requestApi.createRequest(formData)).then((res) => {
       dispatch(action.ui.dismissLoading());
       if (res.data) {
         navigate(routes.requestSuccess, {
@@ -131,6 +134,14 @@ const Request: React.FC = () => {
     onChangeDropdownVal(field, "");
   };
 
+  const memoRef = useRef<File | undefined>();
+  const changeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) {
+      setMemoFileName(e.target.files[0].name);
+      memoRef.current = e.target.files[0];
+    }
+  };
+
   return (
     <div className={`${classes.container}`}>
       <Form ref={formRef} onSubmit={submitVal} className="form-horizontal mt-3 form-material" onChange={onChangeVal}>
@@ -200,7 +211,12 @@ const Request: React.FC = () => {
             />
           </div>
         </div>
-
+        <div className={`card ${classes.card}`}>
+          <div className="card-body">
+            <p className={classes.cardTitle}>Department / Jurusan</p>
+            <TextField type="text" className="form-control" field="department" />
+          </div>
+        </div>
         <div className={`card ${classes.card}`}>
           <div className="card-body">
             <p className={classes.cardTitle}>Barang</p>
@@ -277,6 +293,23 @@ const Request: React.FC = () => {
             </div>
           </div>
         )}
+
+        <div className={`card ${classes.card}`}>
+          <div className="card-body">
+            <input
+              type="file"
+              accept="application/pdf"
+              style={{ display: "none" }}
+              ref={inputFileRef}
+              onChange={changeFile}
+            />
+            <button className="btn btn-outline-info" type="button" onClick={() => inputFileRef.current?.click()}>
+              Tambah memo
+            </button>
+            {memoFileName && <p className="m-0 text-primary">{memoFileName}</p>}
+          </div>
+        </div>
+
         <div className="d-flex justify-content-end mt-3">
           <button className="btn btn-info" type="submit">
             Submit

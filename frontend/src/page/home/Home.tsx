@@ -11,6 +11,8 @@ import action from "@/redux/reduceraction";
 import { idDayJs } from "@/config/helper";
 import StatusFlag from "@/component/status/StatusFlag";
 import useCommonStyle from "@/component/style/common.style";
+import { useNavigate } from "react-router-dom";
+import routes from "@/const/routes";
 
 const Home: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -18,6 +20,7 @@ const Home: React.FC = () => {
   const [pendingReq, setPendingReq] = useState<ReqModel.PendingRequest>([]);
   const [pendingLoading, setPendingLoading] = useState(false);
   const { classes } = useStyle();
+  const navigate = useNavigate();
   const { classes: commonClass } = useCommonStyle();
 
   useEffect(() => {
@@ -217,19 +220,13 @@ const Home: React.FC = () => {
                             </div>
                           </td>
 
-                          <td className={commonClass.stickyTableTd}>
-                            <div>
-                              <p>Status</p>
-                              <StatusFlag status={req.status} />
-                            </div>
-                          </td>
                           <td className={commonClass.stickyTableRight}>
-                            <button
-                              style={{ fontSize: "13px", borderRadius: "9px", padding: "8px 12px" }}
-                              className="btn btn-outline-info"
-                            >
-                              View
-                            </button>
+                            <div>
+                              <div>
+                                <p>Status</p>
+                                <StatusFlag status={req.status} />
+                              </div>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -238,7 +235,11 @@ const Home: React.FC = () => {
                 </div>
                 {pendingReq.length > 0 && (
                   <div className="d-flex justify-content-center my-2">
-                    <button className="btn btn-info" style={{ fontSize: "13px" }}>
+                    <button
+                      onClick={() => navigate(routes.manageRequest)}
+                      className="btn btn-info"
+                      style={{ fontSize: "13px" }}
+                    >
                       Lihat lebih
                     </button>
                   </div>

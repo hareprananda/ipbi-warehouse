@@ -11,6 +11,8 @@ import { RequestStatus, RequestType } from '@prisma/client';
 import { CommonService } from 'src/common/common.service';
 import { GoodsService } from 'src/goods/goods.service';
 import { UserService } from 'src/user/user.service';
+import fs from 'fs';
+import path from 'path';
 
 type FilterKey = keyof Omit<RequestQuery, 'limit' | 'page'>;
 
@@ -33,7 +35,10 @@ export class RequestService {
     private user: UserService,
   ) {}
 
-  async addRequest({ pickUpDate, requestType, goods, returnDate, name, phoneNumber }: RequestDto & RequesterDto) {
+  async addRequest(
+    { pickUpDate, requestType, goods, returnDate, name, phoneNumber, department }: RequestDto & RequesterDto,
+    file: Express.Multer.File,
+  ) {
     const pickupTime = new Date(pickUpDate).getTime();
     const todaysDate = dayjs().format('YYYY-MM-DD');
     if (pickupTime < new Date(todaysDate).getTime()) return HttpReturn('Take date should be at least today', 400);
@@ -55,11 +60,19 @@ export class RequestService {
     }, {} as Record<string, (typeof goods)[number]>);
 
     try {
+      let memo = null;
+      if (file) {
+        const ext = file.mimetype.split('/')[1];
+        const filePath = `memo-${new Date().getTime()}-${Math.floor(Math.random() * 10000)}.${ext}`;
+        fs.writeFileSync(path.resolve(`public/${filePath}`), file.buffer);
+        memo = filePath;
+      }
       const request = await this.prisma.$transaction(async (tx) => {
         const requester = await this.requester.addOrUpdate(
           {
             name,
             phoneNumber,
+            department,
           },
           tx,
         );
@@ -71,6 +84,7 @@ export class RequestService {
             returnDate: returnDate ? new Date(returnDate) : undefined,
             type: requestType,
             idRequester: requester.data.id,
+            memo,
           },
           select: {
             uuid: true,
@@ -242,10 +256,12 @@ export class RequestService {
       select 
         r.uuid,
         r2."name" "requesterName",
+        r2."department" "requesterDepartment",
         r2.phone "requesterPhone",
         r."takeDate",
         r."returnDate",
         r."type",
+        r."memo",
         max(u."name"::TEXT)  as assignee,
         r.status,
         array_agg(json_object(ARRAY['name', g."name", 'quantity', gh.quantity]::TEXT[])) goods
@@ -292,6 +308,7 @@ export class RequestService {
           },
           data: {
             status,
+            memo: status === 'REJECT' ? null : currentRequest.data.status,
           },
           select: {
             goodsHistory: {
@@ -347,6 +364,9 @@ export class RequestService {
           }
         }
       });
+      if (status === 'REJECT' && currentRequest.data.memo) {
+        fs.unlinkSync(path.resolve(`public/${currentRequest.data.memo}`));
+      }
       return HttpReturn('Success', HttpStatus.OK);
     } catch (err) {
       return HttpReturn(

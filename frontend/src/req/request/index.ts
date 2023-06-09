@@ -63,12 +63,13 @@ class Api {
     });
   }
 
-  createRequest(data: Model.RequestPayload) {
-    if (data.returnDate === "" || data.requestType === "TAKE") delete data["returnDate"];
+  createRequest(data: FormData) {
+    if (data.get("returnDate") === "" || data.get("requestType") === "TAKE") data.delete("returnDate");
     return apiCall({
       method: "POST",
       url: `/request`,
       data,
+      isMultipart: true,
     });
   }
 }

@@ -9,6 +9,7 @@ interface Props {
   method: "PUT" | "POST" | "PATCH" | "GET" | "DELETE";
   data?: Record<string, any>;
   params?: Record<string, number | string>;
+  isMultipart?: boolean;
 }
 
 const apiCall = <T>(props: Props) => {
@@ -18,14 +19,15 @@ const apiCall = <T>(props: Props) => {
     if (auth.accessToken) {
       Authorization = `Bearer ${auth.accessToken}`;
     }
+    const { isMultipart, ...restProps } = props;
 
     return axios<Response<T>>({
       baseURL: config.API,
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": isMultipart ? "multipart/form-data" : "application/json",
         Authorization,
       },
-      ...props,
+      ...restProps,
     })
       .then((res) => {
         return res.data;

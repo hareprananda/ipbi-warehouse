@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Patch, Param, Res, Get, Delete, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AddPayload, ChangeLevel, DetailParam, UserQuery } from './dto';
-import { Admin } from 'src/auth/auth.guard';
+import { Admin, Public } from 'src/auth/auth.guard';
 import { Response } from 'express';
 import { Query } from '@nestjs/common/decorators';
 import { Request } from 'src/helper';
@@ -11,6 +11,7 @@ import { Request } from 'src/helper';
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @Public()
   @Post()
   async add(@Body() payload: AddPayload, @Res() response: Response) {
     payload.phoneNumber = payload.phoneNumber.toString();

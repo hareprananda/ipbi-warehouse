@@ -12,7 +12,7 @@ import { PrismaTrxService } from 'src/prisma/dto';
 export class RequesterService {
   constructor(private prisma: PrismaService, private common: CommonService) {}
 
-  async addOrUpdate({ name, phoneNumber }: RequesterDto, tx?: PrismaTrxService) {
+  async addOrUpdate({ name, phoneNumber, department }: RequesterDto, tx?: PrismaTrxService) {
     const ctx = tx || this.prisma;
     try {
       const requester = await ctx.requester.upsert({
@@ -21,9 +21,11 @@ export class RequesterService {
           uuid: randomUUID(),
           phone: phoneNumber,
           numberRequest: 1,
+          department,
         },
         update: {
           name,
+          department,
           numberRequest: {
             increment: 1,
           },

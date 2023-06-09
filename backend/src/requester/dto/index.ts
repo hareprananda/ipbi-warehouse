@@ -6,6 +6,9 @@ export class RequesterDto {
 
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  department: string;
 }
 
 export class GetRequesterDto {

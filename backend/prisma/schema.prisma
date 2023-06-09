@@ -52,6 +52,7 @@ model Requester {
   uuid          String    @unique()
   name          String
   phone         String    @unique
+  department    String?
   numberRequest Int       @default(0)
   request       Request[]
 }
@@ -63,6 +64,7 @@ model Request {
   requester    Requester      @relation(fields: [idRequester], references: [id])
   takeDate     DateTime
   returnDate   DateTime?
+  memo         String?
   type         RequestType
   status       RequestStatus  @default(PENDING)
   createdAt    DateTime       @default(now())

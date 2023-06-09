@@ -35,6 +35,9 @@ export class RequestDto extends RequesterDto {
   @ValidateNested({ each: true })
   @Type(() => GoodType)
   goods: GoodType[];
+
+  @IsString()
+  department: string;
 }
 
 export class MonthlyDto {

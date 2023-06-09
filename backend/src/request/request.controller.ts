@@ -1,23 +1,32 @@
-import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Res, ParseFilePipe } from '@nestjs/common';
 import { ChangeStatusDto, DailyDto, DetailParam, MonthlyDto, RequestDto, RequestQuery } from './dto';
 import { RequestService } from './request.service';
 import { Public } from 'src/auth/auth.guard';
 import { Response } from 'express';
-import { Param, Patch, Req } from '@nestjs/common/decorators';
+import { Param, Patch, Req, UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
 import { HttpReturn, Request } from 'src/helper';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { BodyInterceptor } from './interceptor/BodyInterceptor';
+import { FileValidation } from './validation/FileValidation';
 
 @Controller('request')
 export class RequestController {
   constructor(private request: RequestService) {}
 
   @Post()
+  @UseInterceptors(FileInterceptor('memo'), new BodyInterceptor(['goods']))
   @Public()
-  async createRequest(@Body() data: RequestDto, @Res() response: Response) {
+  async createRequest(
+    @UploadedFile(new ParseFilePipe({ fileIsRequired: false, validators: [new FileValidation({})] }))
+    file: Express.Multer.File,
+    @Body() data: RequestDto,
+    @Res() response: Response,
+  ) {
     if (data.goods.length === 0) {
       response.status(400).json(HttpReturn(`Goods can't be empty`, 400));
       return;
     }
-    const create = await this.request.addRequest(data);
+    const create = await this.request.addRequest(data, file);
     response.status(create.statusCode).json(create);
   }
 

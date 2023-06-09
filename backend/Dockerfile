@@ -8,4 +8,9 @@ COPY .env .
 
 RUN yarn install
 
-CMD [ "yarn", "dev" ]
+RUN yarn migrate:prod
+
+RUN yarn build
+
+CMD [ "yarn", "start" ]
+

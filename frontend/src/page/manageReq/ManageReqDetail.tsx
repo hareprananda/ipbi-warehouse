@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as Model from "@/req/request/request.model";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhone, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faArrowUpRightFromSquare, faPhone, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch } from "@/hooks/useRedux";
 import requestApi from "@/req/request";
 import action from "@/redux/reduceraction";
@@ -9,6 +9,7 @@ import useCommonStyle from "@/component/style/common.style";
 import { idDayJs } from "@/config/helper";
 import StatusFlag from "@/component/status/StatusFlag";
 import Button from "@/component/button/Button";
+import config from "@/config";
 
 interface Props {
   activeData: Model.RequestData;
@@ -127,6 +128,10 @@ const ManageReqDetail: React.FC<Props> = ({ activeData, onResetData, onChangeSta
     }
   };
 
+  const toMemo = (path: string) => {
+    window.open(`${config.API}/${path}`, "_blank");
+  };
+
   const renderDetailBody = () => {
     return (
       <>
@@ -150,9 +155,25 @@ const ManageReqDetail: React.FC<Props> = ({ activeData, onResetData, onChangeSta
             <p className="m-0">{detailData.requesterName}</p>
           </div>
           <div className={`col-6 ${commonClass.commonTd} `}>
-            <p className="m-0">Assign by</p>
-            <p className="m-0">{detailData.assignee}</p>
+            <p className="m-0">Department</p>
+            <p className="m-0">{detailData.requesterDepartment}</p>
           </div>
+          <div className={`col-6 ${commonClass.commonTd} `}>
+            <p className="m-0">Assign by</p>
+            <p className="m-0">{detailData.assignee || "_"}</p>
+          </div>
+          {detailData.memo && (
+            <div className={`col-6 ${commonClass.commonTd} `}>
+              <p className="m-0">Memo</p>
+              <div
+                onClick={() => toMemo(detailData.memo as string)}
+                style={{ display: "flex", alignItems: "center", gap: "5px", cursor: "pointer" }}
+              >
+                <FontAwesomeIcon className="text-info" icon={faArrowUpRightFromSquare} />
+                <p className="m-0 text-info">Lihat memo</p>
+              </div>
+            </div>
+          )}
         </div>
         <p className="mb-0 mt-3" style={{ fontWeight: 500, padding: "0 12px" }}>
           Barang:
