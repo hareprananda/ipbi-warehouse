@@ -228,8 +228,11 @@ export class RequestService {
       const metadata = await this.common.generatePageMetadata(
         this.prisma.$queryRawUnsafe(`
         select count(*) as "totalRow"  from 
-        "Request" r join "Requester" r2 on r."idRequester" = r2.id join "GoodsHistory" gh on gh."idRequest" = r.id left join "Users" u on u.id = gh."assignBy"
+        "Request" r join "Requester" r2 on r."idRequester" = r2.id join
+        "GoodsHistory" gh on gh."idRequest" = r.id left join
+        "Users" u on u.id = gh."assignBy"
         ${filterString}
+        group by r.id, r2.id
       `),
         { limit, page },
       );
