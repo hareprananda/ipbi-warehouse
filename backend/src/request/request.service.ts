@@ -36,7 +36,7 @@ export class RequestService {
   ) {}
 
   async addRequest(
-    { pickUpDate, requestType, goods, returnDate, name, phoneNumber, department }: RequestDto & RequesterDto,
+    { pickUpDate, requestType, goods, returnDate, name, phoneNumber, department, notes }: RequestDto & RequesterDto,
     file: Express.Multer.File,
   ) {
     const pickupTime = new Date(pickUpDate).getTime();
@@ -85,6 +85,7 @@ export class RequestService {
             type: requestType,
             idRequester: requester.data.id,
             memo,
+            notes: notes || null,
           },
           select: {
             uuid: true,
@@ -265,6 +266,7 @@ export class RequestService {
         r."returnDate",
         r."type",
         r."memo",
+        r."notes",
         max(u."name"::TEXT)  as assignee,
         r.status,
         array_agg(json_object(ARRAY['name', g."name", 'quantity', gh.quantity]::TEXT[])) goods

@@ -13,6 +13,7 @@ import requestApi from "@/req/request";
 import action from "@/redux/reduceraction";
 import { useNavigate } from "react-router-dom";
 import routes from "@/const/routes";
+import TextAreaField from "@/component/form/TextArea/TextAreaField";
 
 const Request: React.FC = () => {
   const { classes } = useStyle();
@@ -30,7 +31,7 @@ const Request: React.FC = () => {
   const [memoFileName, setMemoFileName] = useState("");
 
   const submitVal = (values: Record<string, string>) => {
-    const { name, phoneNumber, pickUpDate, requestType, returnDate, department, ...restGoods } = values;
+    const { name, phoneNumber, pickUpDate, requestType, returnDate, department, notes, ...restGoods } = values;
     const goodsObj: Record<string, number> = {};
     for (const goodsKey in restGoods) {
       const amount = parseInt(restGoods[`${goodsKey}-amount`] || "0");
@@ -52,6 +53,7 @@ const Request: React.FC = () => {
     formData.append("goods", JSON.stringify(goodsArr));
     formData.append("returnDate", returnDate);
     formData.append("department", department);
+    formData.append("notes", notes);
     if (memoRef.current) formData.append("memo", memoRef.current);
     dispatch(action.ui.showLoading());
     dispatch(requestApi.createRequest(formData)).then((res) => {
@@ -271,6 +273,18 @@ const Request: React.FC = () => {
                 </button>
               </div>
             )}
+          </div>
+        </div>
+
+        <div className={`card ${classes.card}`}>
+          <div className="card-body">
+            <p className={classes.cardTitle}>Catatan</p>
+            <TextAreaField
+              className="form-control"
+              field="notes"
+              rows={3}
+              placeholder={`Catatan tentang ${isBorrow ? "peminjaman" : "pengambilan"} barang...`}
+            />
           </div>
         </div>
 

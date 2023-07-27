@@ -63,6 +63,7 @@ export type RequestDetail = {
   status: string;
   requesterDepartment: string;
   memo?: string;
+  notes?: string;
   goods: {
     name: string;
     quantity: string;

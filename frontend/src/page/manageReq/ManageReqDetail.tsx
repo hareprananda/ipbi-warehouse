@@ -174,6 +174,10 @@ const ManageReqDetail: React.FC<Props> = ({ activeData, onResetData, onChangeSta
               </div>
             </div>
           )}
+          <div className={`col-12 ${commonClass.commonTd} `}>
+            <p className="m-0">Catatan</p>
+            <p className="m-0">{detailData.notes || "_"}</p>
+          </div>
         </div>
         <p className="mb-0 mt-3" style={{ fontWeight: 500, padding: "0 12px" }}>
           Barang:

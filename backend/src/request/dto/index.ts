@@ -38,6 +38,9 @@ export class RequestDto extends RequesterDto {
 
   @IsString()
   department: string;
+
+  @IsString()
+  notes: string;
 }
 
 export class MonthlyDto {

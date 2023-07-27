@@ -65,6 +65,7 @@ model Request {
   takeDate     DateTime
   returnDate   DateTime?
   memo         String?
+  notes        String?
   type         RequestType
   status       RequestStatus  @default(PENDING)
   createdAt    DateTime       @default(now())
