@@ -178,13 +178,13 @@ export class ReportService {
           g.unit,
           concat('G-', g.id) id,
           (g.stock  -  (case when afterchange."changeAfter" isnull then 0 else afterchange."changeAfter"  end))::int "end",
-          (g.stock  -  (case when addition.addition isnull then 0 else addition.addition  end) - (case when afterchange."changeAfter" isnull then 0 else afterchange."changeAfter"  end) - (case when monthchange."currentChange" isnull then 0 else monthchange."currentChange"  end))::int "start",
-          (case when addition.addition isnull then 0 else addition.addition  end)::int + (case when monthchange."currentChange" isnull then 0 else monthchange."currentChange"  end)::int "change"
+          (g.stock  -  (case when afterchange."changeAfter" isnull then 0 else afterchange."changeAfter"  end) - (case when monthchange."currentChange" isnull then 0 else monthchange."currentChange"  end))::int "start",
+          (case when monthchange."currentChange" isnull then 0 else monthchange."currentChange"  end)::int "change"
           from "Goods" g
           left join (
             select gh1."idGoods" id, sum(gh1.quantity) "changeAfter" from "GoodsHistory" gh1
             left join "Request" r1 on r1.id = gh1 ."idRequest"
-            where gh1."updatedAt"::date > ${lastDayOfMonth}::date and r1.status in ('FINISH', 'ONGOING', null)
+            where gh1."updatedAt"::date > ${lastDayOfMonth}::date and (r1.status in ('FINISH', 'ONGOING', null) or r1.status isnull)
             group by gh1."idGoods"
           ) afterchange on afterchange.id = g.id
           left join (
@@ -192,18 +192,11 @@ export class ReportService {
             left join "Request" r1 on r1.id = gh1 ."idRequest"
             where extract(month from gh1."updatedAt") = ${parseInt(month)}
             and extract(year from gh1."updatedAt") = ${parseInt(year)}
-            and r1.status in ('FINISH', 'ONGOING', null)
+            and (r1.status in ('FINISH', 'ONGOING', null) or r1.status isnull)
             group by gh1."idGoods"
           ) monthchange on monthchange.id = g.id
-          left join (
-            select gh2."idGoods" id, sum(gh2.quantity) addition from "GoodsHistory" gh2
-            where extract(month from gh2."updatedAt") = ${parseInt(month)}
-            and extract(year from gh2."updatedAt") = ${parseInt(year)}
-            and gh2."idRequest" isnull
-            group by gh2."idGoods"
-          ) addition on addition.id = g.id
           join "GoodsHistory" gh on gh."idGoods" = g.id
-          group by g.id, afterchange."changeAfter", monthchange."currentChange", addition.id, addition.addition
+          group by g.id, afterchange."changeAfter", monthchange."currentChange"
           having date_trunc('month', min(gh."updatedAt"))::date <= ${firstDayMonth}::date
       `;
 
